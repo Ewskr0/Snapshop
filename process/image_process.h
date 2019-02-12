@@ -16,5 +16,6 @@ struct box{
 guchar* Get_pixel(GdkPixbuf* image, int x, int y);
 void Fill_color(GdkPixbuf *image, struct color *color, struct box *box);
 void Color_pixel(guchar* pixel, struct color *color);
+guchar* Get_pixel_out(GdkPixbuf* image, int x, int y);
 
 #endif

@@ -1,6 +1,8 @@
 {
   "files.associations": {
     "gtk.h": "c",
-    "image_scale.h": "c"
+    "image_scale.h": "c",
+    "image_process.h": "c",
+    "image_convolution.h": "c"
   }
 }

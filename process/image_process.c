@@ -1,5 +1,5 @@
 #include "image_process.h"
-#include "convolution.h"
+#include "image_convolution.h"
 
 
 guchar* Get_pixel(GdkPixbuf* image, int x, int y)
