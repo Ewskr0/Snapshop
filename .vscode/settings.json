@@ -3,6 +3,7 @@
     "gtk.h": "c",
     "image_scale.h": "c",
     "image_process.h": "c",
-    "image_convolution.h": "c"
+    "image_convolution.h": "c",
+    "blackwhite.h": "c"
   }
 }
