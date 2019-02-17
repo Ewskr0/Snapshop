@@ -14,7 +14,9 @@ GARBAGE_PATTERNS := *.o *~ core .depend .*.cmd *.ko *.mod.c *.png
 GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 
 ## Include all C
-SRC= main.c io/io.c process/image_process.c process/image_convolution.c  process/image_circle.c process/image_scale.c
+SRC= main.c io/io.c process/image_process.c process/image_convolution.c \
+process/image_circle.c process/image_scale.c process/image_grayscale.c \
+process/image_binarize.c
 
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
