@@ -9,5 +9,10 @@ void Fill_circle
 (GdkPixbuf *image, struct color *color, int x_center, int y_center, int r);
 void Draw_circle
 (GdkPixbuf *image, struct color *color, int x_center, int y_center, int r);
-
+void testCircleDraw
+(GdkPixbuf *image, struct color *color, int xc, int yc, int r, int filled);
+void fill
+(GdkPixbuf *image,int xc, int yc, int x, int y, struct color *color);
+void draw
+(GdkPixbuf *image,int xc, int yc, int x, int y, struct color *color);
 #endif
