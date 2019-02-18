@@ -1,6 +1,6 @@
 #include "contrast.h"
 
-void Brighthness(GdkPixbuf *image, int offset)
+void Brightness(GdkPixbuf *image, int offset)
 {
   for (int y = 0; y < gdk_pixbuf_get_height(image); ++y) {
     for (int x = 0; x < gdk_pixbuf_get_width(image); ++x) {
