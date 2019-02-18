@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #ifndef SNAPSHOP_CONTRAST_H
-#ifndef SNAPSHOP_CONTRAST_H
+#define SNAPSHOP_CONTRAST_H
 
 void Brighthness(GdkPixbuf *image, int offset);
 void Contrast(GdkPixbuf *image, int offset);

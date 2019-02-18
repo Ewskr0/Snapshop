@@ -9,6 +9,8 @@
 #include "process/image_circle.h"
 #include "process/image_scale.h"
 #include "process/image_grayscale.h"
+#include "process/image_binarize.h"
+
 
 
 int test_scale(char *path)
@@ -60,7 +62,7 @@ int test_grayscale(char *path)
   Save_pixbuf("img_out/img_grayscale.png", "png", image);
   
   printf(" ==== Testing image_binarize method ====\n");
-  Binarize(image, 127);
+  binarize(image, 127);
   Save_pixbuf("img_out/img_binarized.png", "png", image);
   printf("- Image converted in gray and binarized\n");
 

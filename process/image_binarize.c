@@ -1,6 +1,6 @@
 #include "image_binarize.h"
 
-void Binarize(GdkPixbuf *image, int tresh)
+void binarize(GdkPixbuf *image, int tresh)
 {
   if(tresh < 0 || tresh > 255)
     errx(EXIT_FAILURE, "tresh must be between 0 and 255");
