@@ -51,10 +51,10 @@ void Fill_color(GdkPixbuf *image, struct color *color, struct box *box)
 
 void Color_pixel(guchar* p, struct color *color)
 {
-  *(p)   = (*p * ((guchar)100 - color->opacity) +
-            (color->opacity * color->red))/(guchar)100;
-  *(p + 1) = (*(p + 1) * ((guchar)100 - color->opacity) +
-              (color->opacity * color->green))/(guchar)100;
-  *(p + 2) = (*(p + 2) * ((guchar)100 - color->opacity) +
-              (color->opacity * color->blue))/(guchar)100;
+  *(p)   = ((guchar)100 - color->opacity) +
+            (color->opacity * color->red)/(guchar)100;
+  *(p + 1) = ((guchar)100 - color->opacity) +
+              (color->opacity * color->green)/(guchar)100;
+  *(p + 2) = ((guchar)100 - color->opacity) +
+              (color->opacity * color->blue)/(guchar)100;
 }
