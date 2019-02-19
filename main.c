@@ -108,6 +108,9 @@ int test_grayscale(char *path)
 int main(int argc, char *argv[])                                        
 { 
   printf("\n");
+  
+  Check_dir("img_out/");
+
   if(argc == 1)
   {
     test_scale("img_test/img_3.jpg");
