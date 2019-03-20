@@ -26,6 +26,14 @@ int test_motionblur(char *path){
   Save_pixbuf("img_out/img_blurhor.png","png",blur_hor);
   printf("- Motion blur applied\n\n");
 
+    printf(" === Testing motion_blur function v2 ====\n");
+  GdkPixbuf *blur_hor2 = Motion_blur_hor(image,100);                            
+  Save_pixbuf("img_out/img_blurhor2.png","png",blur_hor2);
+  printf("- Motion blur 2 applied\n\n");
+
+
+
+
   return 0;                                                                   
 }                                                                               
 
