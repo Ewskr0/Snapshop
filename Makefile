@@ -16,7 +16,7 @@ GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 ## Include all C
 SRC= main.c io/io.c process/image_process.c process/image_convolution.c \
 process/image_circle.c process/image_scale.c process/image_grayscale.c \
-filters/contrast.c process/image_binarize.c
+filters/contrast.c process/image_binarize.c process/image_crypto.c
 
 OBJ= ${SRC:.c=.o}
 DEP= ${SRC:.c=.d}
