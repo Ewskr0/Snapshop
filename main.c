@@ -11,6 +11,7 @@
 #include "process/image_grayscale.h"
 #include "process/image_binarize.h"
 #include "process/image_crypto.h"
+#include "process/image_histogram.h"
 
 #include "filters/contrast.h"
 
@@ -118,24 +119,38 @@ int test_grayscale(char *path)
     return 0;
 }
 
-int test_crypto(char* path)
+int test_histogram(char *path)
+{
+    printf(" ==== Testing histogram method ====\n");
+    GdkPixbuf *image = Load_image(path);
+    image = Create_histo_graph(image);
+
+    printf("- Black histogram generated\n");
+    printf("- Red histogram generated\n");
+    printf("- Green histogram generated\n");
+    printf("- Blue histogram generated\n");
+    printf("- Main histogram generated\n");
+
+    return 0;
+}
+
+int test_crypto(char *path)
 {
     printf(" ==== Testing crypto method ====\n");
     GdkPixbuf *image = Load_image(path);
     GdkPixbuf *code;
     code = Crypto(image);
-    
+
     Save_pixbuf("img_out/img_encrypted.png", "png", image);
     Save_pixbuf("img_out/code.png", "png", code);
 
     Uncrypt(image, code);
     Save_pixbuf("img_out/img_decrypted.png", "png", image);
-    
+
     printf("- Code generated\n");
     printf("- Image crypted \n");
     printf("- Image decrypted\n");
     return 0;
-
 }
 
 int main(int argc, char *argv[])
@@ -146,40 +161,41 @@ int main(int argc, char *argv[])
 
     if (argc == 1)
     {
-	test_scale("img_test/img_3.jpg");
-	test_drawcircle("img_test/img_1.jpg", 70);
-	test_fillcircle("img_test/img_1.jpg", 70);
-	test_grayscale("img_test/img_2.jpg");
-	test_contrast("img_test/img_4.jpg");
-	test_motionblur("img_test/img_sansblur.jpg");
-	test_crypto("img_test/img_3.jpg");
-	printf(" ==== Results in img_out/ ==== \n");
+        test_scale("img_test/img_3.jpg");
+        test_drawcircle("img_test/img_1.jpg", 70);
+        test_fillcircle("img_test/img_1.jpg", 70);
+        test_grayscale("img_test/img_2.jpg");
+        test_contrast("img_test/img_4.jpg");
+        test_motionblur("img_test/img_sansblur.jpg");
+        test_crypto("img_test/img_3.jpg");
+        test_histogram("img_test/img_3.jpg");
+        printf(" ==== Results in img_out/ ==== \n");
     }
     else if (argc == 3)
     {
-	char *function = argv[2];
-	if (!strcmp(function, "scale"))
-	    test_scale(argv[1]);
-	else if (!strcmp(function, "drawc"))
-	    test_drawcircle(argv[1], 70);
-	else if (!strcmp(function, "fillc"))
-	    test_fillcircle(argv[1], 70);
-	else if (!strcmp(function, "gray"))
-	    test_grayscale(argv[1]);
-	else if (!strcmp(function, "contra"))
-	    test_contrast(argv[1]);
-	else if (!strcmp(function, "blur"))
-	    test_motionblur(argv[1]);
-	else if (!strcmp(function, "crypto"))
-	    test_crypto(argv[1]);
-	else
-	    errx(EXIT_FAILURE, "Invalid function name\n \
+        char *function = argv[2];
+        if (!strcmp(function, "scale"))
+            test_scale(argv[1]);
+        else if (!strcmp(function, "drawc"))
+            test_drawcircle(argv[1], 70);
+        else if (!strcmp(function, "fillc"))
+            test_fillcircle(argv[1], 70);
+        else if (!strcmp(function, "gray"))
+            test_grayscale(argv[1]);
+        else if (!strcmp(function, "contra"))
+            test_contrast(argv[1]);
+        else if (!strcmp(function, "blur"))
+            test_motionblur(argv[1]);
+        else if (!strcmp(function, "crypto"))
+            test_crypto(argv[1]);
+        else
+            errx(EXIT_FAILURE, "Invalid function name\n \
 		    try scale, drawc, fillc, gray, contra, blur");
 
-	printf(" ==== Results in img_out/ ==== \n");
+        printf(" ==== Results in img_out/ ==== \n");
     }
     else
-	errx(EXIT_FAILURE, "Invalid args please use the image path");
+        errx(EXIT_FAILURE, "Invalid args please use the image path");
 
     return 0;
 }

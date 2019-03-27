@@ -4,6 +4,10 @@
     "image_scale.h": "c",
     "image_process.h": "c",
     "image_convolution.h": "c",
-    "blackwhite.h": "c"
+    "blackwhite.h": "c",
+    "image_binarize.h": "c",
+    "image_crypto.h": "c",
+    "image_histogram.h": "c",
+    "io.h": "c"
   }
 }

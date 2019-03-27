@@ -1,6 +1,5 @@
-#include <gtk-3.0/gtk/gtk.h>
-#include <stdlib.h>
 #include "image_process.h"
+#include "../io/io.h"
 
 #ifndef SNAPSHOP_TOOLS_H
 #define SNAPSHOP_TOOLS_H
