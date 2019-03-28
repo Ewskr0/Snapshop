@@ -113,7 +113,7 @@ int test_fillcolor(char* path)
     struct color *col = malloc(sizeof(struct color));
     col->red = 255; col->green = 0; col->blue = 0; col->opacity = 255;
     Fill_color2(image, col, toFill);
-    Save_pixbuf("img_out/img_fillcolor.png", "png", image);
+    Save_pixbuf("dst/filtre/img_fillcolor.png", "png", image);
     printf("- Area filled with red");
     
     return 0;
@@ -180,6 +180,7 @@ int main(int argc, char *argv[])
         test_scale("src/image/img_3.jpg");
         test_drawcircle("src/image/img_1.jpg", 70);
         test_fillcircle("src/image/img_1.jpg", 70);
+	test_fillcolor("src/image/img_3.jpg");
         test_grayscale("src/image/img_2.jpg");
         test_contrast("src/image/img_4.jpg");
         test_motionblur("src/image/img_sansblur.jpg");
