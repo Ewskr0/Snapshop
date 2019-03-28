@@ -12,6 +12,7 @@
 #include "process/image_binarize.h"
 #include "process/image_crypto.h"
 #include "process/image_histogram.h"
+#include "process/image_reverse.h"
 
 #include "filters/contrast.h"
 
@@ -66,6 +67,24 @@ int test_scale(char *path)
     scale_1 = Scale_neighbors(image, 300, 300);
     Save_pixbuf("dst/filtre/img_rescaled.png", "png", scale_1);
     printf("- Scale_neighbors x300 \n\n");
+
+    return 0;
+}
+
+int test_reverse(char *path)
+{
+    printf(" ==== Testing image_reverse methods ====\n");
+    GdkPixbuf *image = Load_image(path);
+    GdkPixbuf *image2 = Load_image(path);
+    
+    ReverseVert(image);
+    ReverseHor(image2);
+
+    Save_pixbuf("dst/filtre/img_reverseVert.png", "png", image);
+    Save_pixbuf("dst/filtre/img_reverseHor.png", "png", image2);
+    
+    printf("- Image reversed vertically\n");
+    printf("- Image reversed horizontally\n\n");
 
     return 0;
 }
@@ -178,6 +197,7 @@ int main(int argc, char *argv[])
     if (argc == 1)
     {
         test_scale("src/image/img_3.jpg");
+	test_reverse("src/image/img_2.jpg");
         test_drawcircle("src/image/img_1.jpg", 70);
         test_fillcircle("src/image/img_1.jpg", 70);
 	test_fillcolor("src/image/img_3.jpg");
