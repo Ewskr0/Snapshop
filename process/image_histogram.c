@@ -81,12 +81,12 @@ GdkPixbuf *Create_histo_graph(GdkPixbuf *image)
     struct box blue_boxAll = {i * 2, 200 - (histo->blue[i] * 100 / correction_factor) * 2, i * 2, 200 - (histo->blue[i] * 100 / correction_factor) * 2};
     Fill_color(graphAll, &blue_color, &blue_boxAll);
   }
-  Save_pixbuf("./src/histogram/graphBlack.png", "png", graphBlack);
-  Save_pixbuf("./src/histogram/graphRed.png", "png", graphRed);
-  Save_pixbuf("./src/histogram/graphGreen.png", "png", graphGreen);
-  Save_pixbuf("./src/histogram/graphBLue.png", "png", graphBLue);
-  Save_pixbuf("src/histogram/graphBlack.png", "png", graphBlack);
-  Save_pixbuf("src/histogram/graphAll.png", "png", graphAll);
+  Save_pixbuf("./dst/histogram/graphBlack.png", "png", graphBlack);
+  Save_pixbuf("./dst/histogram/graphRed.png", "png", graphRed);
+  Save_pixbuf("./dst/histogram/graphGreen.png", "png", graphGreen);
+  Save_pixbuf("./dst/histogram/graphBLue.png", "png", graphBLue);
+  Save_pixbuf("./dst/histogram/graphBlack.png", "png", graphBlack);
+  Save_pixbuf("./dst/histogram/graphAll.png", "png", graphAll);
 
   return graphAll;
 }

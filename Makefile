@@ -8,7 +8,7 @@ LDFLAGS=
 LDLIBS= `pkg-config --libs gtk+-3.0` -lm
 
 ## Cleaning part
-SUBDIR_ROOTS := io process filters img_out
+SUBDIR_ROOTS := io process filters dst
 DIRS := . $(shell find $(SUBDIR_ROOTS) -type d)
 GARBAGE_PATTERNS := *.o *.png *.d *.jpg main
 GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
