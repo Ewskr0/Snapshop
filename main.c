@@ -103,6 +103,22 @@ int test_fillcircle(char *path, int r)
     return 0;
 }
 
+int test_fillcolor(char* path)
+{
+    printf(" ==== Testing fillcolor method ====\n");
+    GdkPixbuf *image = Load_image(path);
+    struct box *toFill = malloc(sizeof(struct box));
+    toFill->x1 = 100; toFill->y1 = 100;
+    toFill->x2 = 500; toFill->y2 = 500;
+    struct color *col = malloc(sizeof(struct color));
+    col->red = 255; col->green = 0; col->blue = 0; col->opacity = 255;
+    Fill_color2(image, col, toFill);
+    Save_pixbuf("img_out/img_fillcolor.png", "png", image);
+    printf("- Area filled with red");
+    
+    return 0;
+}
+
 int test_grayscale(char *path)
 {
     printf(" ==== Testing grayscale method ====\n");
@@ -149,7 +165,7 @@ int test_crypto(char *path)
 
     printf("- Code generated\n");
     printf("- Image crypted \n");
-    printf("- Image decrypted\n");
+    printf("- Image decrypted\n\n");
     return 0;
 }
 
@@ -164,6 +180,7 @@ int main(int argc, char *argv[])
         test_scale("img_test/img_3.jpg");
         test_drawcircle("img_test/img_1.jpg", 70);
         test_fillcircle("img_test/img_1.jpg", 70);
+	test_fillcolor("img_test/img_3.jpg");
         test_grayscale("img_test/img_2.jpg");
         test_contrast("img_test/img_4.jpg");
         test_motionblur("img_test/img_sansblur.jpg");
