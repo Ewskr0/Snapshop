@@ -1,6 +1,6 @@
 #include "image_fusion.h"
 
-GdkPixbuf* Fusion(GdkPixbuf *img, double alpha){
+void Fusion(GdkPixbuf *img, double alpha){
 	int height = gdk_pixbuf_get_height(img);
 	int width = gdk_pixbuf_get_width(img);
 
@@ -8,8 +8,8 @@ GdkPixbuf* Fusion(GdkPixbuf *img, double alpha){
 		err(1,"No alpha channel in image.");
 	
 
-	for(int y = 0; y<height; y++){
-		for(int x =0; x<width;x++){
+	for(int y = 0; y < height ; y++){
+		for(int x = 0; x < width ; x++){
 			guchar* cur_pixel= Get_pixel(img,x,y);
 			cur_pixel[3] = alpha;
 
