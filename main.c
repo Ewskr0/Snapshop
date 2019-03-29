@@ -13,6 +13,7 @@
 #include "process/image_crypto.h"
 #include "process/image_histogram.h"
 #include "process/image_reverse.h"
+#include "process/image_rotate.h"
 
 #include "filters/contrast.h"
 
@@ -89,6 +90,25 @@ int test_reverse(char *path)
     return 0;
 }
 
+int test_rotate(char *path)
+{
+    printf(" ==== Testing image_rotate method ====\n");
+    GdkPixbuf *image = Load_image(path);
+
+    GdkPixbuf *rot1 = Rotate(image, 1);
+    Save_pixbuf("dst/filtre/img_rot1x.png", "png", rot1);
+
+    GdkPixbuf *rot2 = Rotate(image, 2);
+    Save_pixbuf("dst/filtre/img_rot2x.png", "png", rot2); 
+
+    GdkPixbuf *rot3 = Rotate(image, 3);
+    Save_pixbuf("dst/filtre/img_rot3x.png", "png", rot3);
+
+    printf("- Image rotated\n\n");
+
+    return 0;
+}
+
 int test_drawcircle(char *path, int r)
 {
     struct color *Couleur = malloc(sizeof(struct color));
@@ -133,7 +153,7 @@ int test_fillcolor(char* path)
     col->red = 255; col->green = 0; col->blue = 0; col->opacity = 255;
     Fill_color2(image, col, toFill);
     Save_pixbuf("dst/filtre/img_fillcolor.png", "png", image);
-    printf("- Area filled with red");
+    printf("- Area filled with red\n\n");
     
     return 0;
 }
@@ -198,6 +218,7 @@ int main(int argc, char *argv[])
     {
         test_scale("src/image/img_3.jpg");
 	test_reverse("src/image/img_2.jpg");
+	test_rotate("src/image/img_2.jpg");
         test_drawcircle("src/image/img_1.jpg", 70);
         test_fillcircle("src/image/img_1.jpg", 70);
 	test_fillcolor("src/image/img_3.jpg");
