@@ -1,4 +1,3 @@
-//#include <gtk-3.0/gtk.h>
 #include <err.h>
 #include "image_process.h"
 
