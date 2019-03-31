@@ -14,6 +14,7 @@
 #include "process/image_histogram.h"
 #include "process/image_reverse.h"
 #include "process/image_rotate.h"
+#include "process/image_split.h"
 
 #include "filters/contrast.h"
 
@@ -205,6 +206,21 @@ int test_crypto(char *path)
     printf("- Code generated\n");
     printf("- Image crypted \n");
     printf("- Image decrypted\n\n");
+    
+    return 0;
+}
+
+int test_split(char *path)
+{
+    printf("==== Testing colors split method ====\n");
+    GdkPixbuf *image = Load_image(path);
+    GdkPixbuf** result = Split(image);
+
+    Save_pixbuf("dst/filtre/img_splitRed.png", "png", result[0]);
+    Save_pixbuf("dst/filtre/img_splitGreen.png", "png", result[1]);
+    Save_pixbuf("dst/filtre/img_splitBlue.png", "png", result[2]);
+
+    printf("- Image splitted in 3\n\n");
     return 0;
 }
 
@@ -216,7 +232,7 @@ int main(int argc, char *argv[])
 
     if (argc == 1)
     {
-        test_scale("src/image/img_3.jpg");
+	test_scale("src/image/img_3.jpg");
 	test_reverse("src/image/img_2.jpg");
 	test_rotate("src/image/img_2.jpg");
         test_drawcircle("src/image/img_1.jpg", 70);
@@ -226,7 +242,10 @@ int main(int argc, char *argv[])
         test_contrast("src/image/img_4.jpg");
         test_motionblur("src/image/img_sansblur.jpg");
         test_crypto("src/image/img_3.jpg");
+	test_split("src/image/img_1.jpg");
         test_histogram("src/image/img_2.jpg");
+
+
         printf(" ==== Results in dst/filtre/ ==== \n");
     }
     else if (argc == 3)
