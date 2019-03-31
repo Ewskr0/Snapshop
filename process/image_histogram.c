@@ -56,29 +56,29 @@ GdkPixbuf *Create_histo_graph(GdkPixbuf *image)
   for (int i = 0; i < 256; ++i)
   {
     // graphBlack
-    struct box black_box = {i * 2, 200 - (histo->light[i] * 100 / correction_factor) * 2, i * 2, 200};
+    struct box black_box = {i * 2, 245 - (histo->light[i] * 100 / correction_factor) * 2, i * 2, 245};
     Fill_color(graphBlack, &black_color, &black_box);
 
     // graphRed
-    struct box red_box = {i * 2, 200 - (histo->red[i] * 100 / correction_factor) * 2, i * 2, 200};
+    struct box red_box = {i * 2, 245 - (histo->red[i] * 100 / correction_factor) * 2, i * 2, 245};
     Fill_color(graphRed, &red_color, &red_box);
 
     // graphGreen
-    struct box green_box = {i * 2, 200 - (histo->green[i] * 100 / correction_factor) * 2, i * 2, 200};
+    struct box green_box = {i * 2, 245 - (histo->green[i] * 100 / correction_factor) * 2, i * 2, 245};
     Fill_color(graphGreen, &green_color, &green_box);
 
     // graphBLue
-    struct box blue_box = {i * 2, 200 - (histo->blue[i] * 100 / correction_factor) * 2, i * 2, 200};
+    struct box blue_box = {i * 2, 245 - (histo->blue[i] * 100 / correction_factor) * 2, i * 2, 245};
     Fill_color(graphBLue, &blue_color, &blue_box);
 
     // graphAll
-    struct box black_boxAll = {i * 2, 200 - (histo->light[i] * 100 / correction_factor) * 2, i * 2, 200 - (histo->light[i] * 100 / correction_factor) * 2};
+    struct box black_boxAll = {i * 2, 245 - (histo->light[i] * 100 / correction_factor) * 2, i * 2, 245 - (histo->light[i] * 100 / correction_factor) * 2};
     Fill_color(graphAll, &black_color, &black_boxAll);
-    struct box red_boxAll = {i * 2, 200 - (histo->red[i] * 100 / correction_factor) * 2, i * 2, 200 - (histo->red[i] * 100 / correction_factor) * 2};
+    struct box red_boxAll = {i * 2, 245 - (histo->red[i] * 100 / correction_factor) * 2, i * 2, 245 - (histo->red[i] * 100 / correction_factor) * 2};
     Fill_color(graphAll, &red_color, &red_boxAll);
-    struct box green_boxAll = {i * 2, 200 - (histo->green[i] * 100 / correction_factor) * 2, i * 2, 200 - (histo->green[i] * 100 / correction_factor) * 2};
+    struct box green_boxAll = {i * 2, 245 - (histo->green[i] * 100 / correction_factor) * 2, i * 2, 245 - (histo->green[i] * 100 / correction_factor) * 2};
     Fill_color(graphAll, &green_color, &green_boxAll);
-    struct box blue_boxAll = {i * 2, 200 - (histo->blue[i] * 100 / correction_factor) * 2, i * 2, 200 - (histo->blue[i] * 100 / correction_factor) * 2};
+    struct box blue_boxAll = {i * 2, 245 - (histo->blue[i] * 100 / correction_factor) * 2, i * 2, 245 - (histo->blue[i] * 100 / correction_factor) * 2};
     Fill_color(graphAll, &blue_color, &blue_boxAll);
   }
   Save_pixbuf("./dst/histogram/graphBlack.png", "png", graphBlack);
