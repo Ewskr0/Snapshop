@@ -15,6 +15,7 @@
 #include "process/image_reverse.h"
 #include "process/image_rotate.h"
 #include "process/image_split.h"
+#include "process/image_fusion.h"
 
 #include "filters/contrast.h"
 
@@ -179,7 +180,7 @@ int test_fusion(char *path)
 {
     printf(" ==== Testing fusion method ====\n");
     GdkPixbuf *image = Load_image(path);
-    image_fusion(image,25);
+    Fusion(image,25);
     Save_pixbuf("dst/filtre/img_fusion.png", "png", image);
     printf("- Alpha applied to the image\n\n");
 

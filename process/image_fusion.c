@@ -15,8 +15,6 @@ void Fusion(GdkPixbuf *img, int alpha){
 
 		}
 	}
-
-
-
+	}
 
 }

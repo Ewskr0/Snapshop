@@ -4,5 +4,5 @@
 #ifndef SNAPSHOP_IMAGE_FUSION_H
 #define SNAPSHOP_IMAGE_FUSION_H
 
-GdkPixbuf* Fusion(GdkPixbuf *img, int alpha);
+void Fusion(GdkPixbuf *img, int alpha);
 #endif
