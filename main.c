@@ -175,6 +175,17 @@ int test_grayscale(char *path)
     return 0;
 }
 
+int test_fusion(char *path)
+{
+    printf(" ==== Testing fusion method ====\n");
+    GdkPixbuf *image = Load_image(path);
+    image_fusion(image,25);
+    Save_pixbuf("dst/filtre/img_fusion.png", "png", image);
+    printf("- Alpha applied to the image\n\n");
+
+    return 0;
+}
+
 int test_histogram(char *path)
 {
     printf(" ==== Testing histogram method ====\n");
@@ -244,6 +255,7 @@ int main(int argc, char *argv[])
         test_crypto("src/image/img_3.jpg");
 	test_split("src/image/img_1.jpg");
         test_histogram("src/image/img_2.jpg");
+	test_fusion("src/image/img_3.jpg");
 
 
         printf(" ==== Results in dst/filtre/ ==== \n");

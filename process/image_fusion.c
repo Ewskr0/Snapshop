@@ -1,6 +1,6 @@
 #include "image_fusion.h"
 
-void Fusion(GdkPixbuf *img, double alpha){
+void Fusion(GdkPixbuf *img, int alpha){
 	int height = gdk_pixbuf_get_height(img);
 	int width = gdk_pixbuf_get_width(img);
 
