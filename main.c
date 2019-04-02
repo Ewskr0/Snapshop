@@ -19,273 +19,261 @@
 
 #include "filters/contrast.h"
 
-int test_motionblur(char *path)
-{
-    struct convolution_matrix *convo = InitMotionBlur(5, 3);
-    GdkPixbuf *image = Load_image(path);
+GtkBuilder *builder;
+GtkEntry *file;
 
-    printf(" === Testing convolution function ====\n");
-    GdkPixbuf *new_image = Apply_matrix(image, convo);
-    Save_pixbuf("dst/filtre/img_convo.png", "png", new_image);
-    printf("- Convolution filter applied\n\n");
+GdkPixbuf *image_surface;
 
-    printf(" === Testing motion_blur function ====\n");
-    GdkPixbuf *blur_hor = Motion_blur_hor(image, 25);
-    Save_pixbuf("dst/filtre/img_blurhor.png", "png", blur_hor);
-    printf("- Motion blur applied\n\n");
+int width = 0;
+int height = 0;
 
-    printf(" === Testing motion_blur function v2 ====\n");
-    GdkPixbuf *blur_hor2 = Motion_blur_hor(image, 100);
-    Save_pixbuf("dst/filtre/img_blurhor2.png", "png", blur_hor2);
-    printf("- Motion blur 2 applied\n\n");
+int ratio = 100;
 
-    return 0;
-}
 
-int test_contrast(char *path)
-{
-    int offset = 30;
-    GdkPixbuf *image_bright = Load_image(path);
-    GdkPixbuf *image_contr = Load_image(path);
-
-    Brightness(image_bright, offset);
-    printf(" === Testing brightness function ====\n");
-    Save_pixbuf("dst/filtre/img_bright.png", "png", image_bright);
-    printf("- Image brightened\n\n");
-
-    Contrast(image_contr, offset);
-    printf(" === Testing contrast function ====\n");
-    Save_pixbuf("dst/filtre/img_contrast.png", "png", image_contr);
-    printf("- Contrast improved\n\n");
-
-    return 0;
-}
-
-int test_scale(char *path)
-{
-    printf(" ==== Testing image_scale method ====\n");
-    GdkPixbuf *image = Load_image(path);
-
-    GdkPixbuf *scale_1;
-    scale_1 = Scale_neighbors(image, 300, 300);
-    Save_pixbuf("dst/filtre/img_rescaled.png", "png", scale_1);
-    printf("- Scale_neighbors x300 \n\n");
-
-    return 0;
-}
-
-int test_reverse(char *path)
-{
-    printf(" ==== Testing image_reverse methods ====\n");
-    GdkPixbuf *image = Load_image(path);
-    GdkPixbuf *image2 = Load_image(path);
+void buttonload_clicked(GtkButton *button){
     
-    ReverseVert(image);
-    ReverseHor(image2);
-
-    Save_pixbuf("dst/filtre/img_reverseVert.png", "png", image);
-    Save_pixbuf("dst/filtre/img_reverseHor.png", "png", image2);
+    GtkWidget *popup; 
+    popup = GTK_WIDGET(gtk_builder_get_object(builder,"filechooser"));
     
-    printf("- Image reversed vertically\n");
-    printf("- Image reversed horizontally\n\n");
 
-    return 0;
+    gtk_widget_show(popup);
+
+}
+//////**NEW FILE**///////
+void button_new(GtkButton *button){
+	GtkWidget *newfile;
+	newfile = GTK_WIDGET(gtk_builder_get_object(builder,"newfile"));
+	gtk_widget_show(newfile);
 }
 
-int test_rotate(char *path)
-{
-    printf(" ==== Testing image_rotate method ====\n");
-    GdkPixbuf *image = Load_image(path);
-
-    GdkPixbuf *rot1 = Rotate(image, 1);
-    Save_pixbuf("dst/filtre/img_rot1x.png", "png", rot1);
-
-    GdkPixbuf *rot2 = Rotate(image, 2);
-    Save_pixbuf("dst/filtre/img_rot2x.png", "png", rot2); 
-
-    GdkPixbuf *rot3 = Rotate(image, 3);
-    Save_pixbuf("dst/filtre/img_rot3x.png", "png", rot3);
-
-    printf("- Image rotated\n\n");
-
-    return 0;
+void fermer_newfile(){
+    GtkWidget* newfile;
+    newfile = GTK_WIDGET(gtk_builder_get_object(builder,"newfile"));
+    gtk_widget_hide(newfile);
 }
 
-int test_drawcircle(char *path, int r)
-{
-    struct color *Couleur = malloc(sizeof(struct color));
-    Couleur->red = 255;
-    Couleur->green = 255;
-    Couleur->blue = 255;
-    Couleur->opacity = 255;
-    printf(" ==== Testing Draw_circle method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    testCircleDraw(image, Couleur, 150, 150, r, 0);
-    Save_pixbuf("dst/filtre/img_drawcircle.png", "png", image);
-    printf("- Circle drawn (150, 150)\n\n");
+void valider_newfile(){
+	int width, height;
+	width = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder,"entry_width"))));
+	height = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder,"entry_height"))));	
 
-    return 0;
+	if(width>1280){
+		ratio = 100*(1280.0/(double)width);
+	}	
+	else if(height>720){
+		ratio = 100*(720.0/(double)height);
+	}
+
+	width = width*ratio/100;
+	height = height*ratio/100;
+
+	image_surface = gdk_pixbuf_new(GDK_COLORSPACE_RGB,0,8,width,height);
+
+	/*GtkColorChooser *color_chooser;
+	color_chooser = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder,"color"));	
+	GdkRGBA* color_choosed = malloc(sizeof(GdkRGBA));
+	
+	gtk_color_chooser_get_rgba(color_chooser,color_choosed);
+	
+	/*struct color *color = malloc(sizeof(struct color));
+	//printf("%f\n",(guchar)(255*(color_choosed->red)));
+        color->red = (guchar)(255*(color_choosed->red));
+        color->green = (guchar)(255*(color_choosed->green));
+        color->blue = (guchar)(255*(color_choosed->blue));
+	color->opacity = 1;
+	
+	
+        struct box *box = malloc(sizeof(struct box));
+        box->x1 = 0;
+        box->x2 = 1280;//gdk_pixbuf_get_width(image_surface);
+        box->y1 = 0;
+        box->y2 = 720;//gdk_pixbuf_get_height(image_surface);
+
+	Fill_color(image_surface,color,box);*/
+
+	
+	GtkImage *image = 
+		    GTK_IMAGE(gtk_builder_get_object(builder,"image_display"));
+	
+	gtk_image_set_from_pixbuf(image,image_surface);
+	
+
+	/*free(color);
+	free(box);
+	free(color_choosed);*/
+	fermer_newfile();
+
+	GtkWidget* tools;
+	tools = GTK_WIDGET(gtk_builder_get_object(builder,"tools"));
+	gtk_widget_show(tools);
+}
+	/////**Color Dialog**///////////
+void button_color(){
+	GtkWidget *color;
+	color = GTK_WIDGET(gtk_builder_get_object(builder,"color"));
+	gtk_widget_show(color);
 }
 
-int test_fillcircle(char *path, int r)
-{
-    struct color *Couleur = malloc(sizeof(struct color));
-    Couleur->red = 255;
-    Couleur->green = 255;
-    Couleur->blue = 255;
-    Couleur->opacity = 255;
-
-    printf(" ==== Testing fill_circle method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    testCircleDraw(image, Couleur, 150, 150, r, 1);
-    Save_pixbuf("dst/filtre/img_fillcircle.png", "png", image);
-    printf("- Circle filled (150, 150)\n\n");
-
-    return 0;
+void fermer_color(){
+	GtkWidget *color;
+	color = GTK_WIDGET(gtk_builder_get_object(builder,"color"));
+	gtk_widget_hide(color);
 }
 
-int test_fillcolor(char* path)
-{
-    printf(" ==== Testing fillcolor method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    struct box *toFill = malloc(sizeof(struct box));
-    toFill->x1 = 100; toFill->y1 = 100;
-    toFill->x2 = 500; toFill->y2 = 500;
-    struct color *col = malloc(sizeof(struct color));
-    col->red = 255; col->green = 0; col->blue = 0; col->opacity = 255;
-    Fill_color2(image, col, toFill);
-    Save_pixbuf("dst/filtre/img_fillcolor.png", "png", image);
-    printf("- Area filled with red\n\n");
-    
-    return 0;
+void valider_color(){
+	GtkColorChooser *color;
+	color = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder,"color"));
+	GdkRGBA *choosed_color = malloc(sizeof(GdkRGBA));
+
+	gtk_color_chooser_get_rgba(color,choosed_color);
+	
+	GtkColorButton *color_button;
+	GdkColor *color_transform = malloc(sizeof(GdkColor));
+	color_transform->red = (guint16)(65535*(choosed_color->red));
+	color_transform->blue = (guint16)(65535*(choosed_color->blue));
+	color_transform->green = (guint16)(65535*(choosed_color->green));
+
+	color_button = GTK_COLOR_BUTTON(gtk_builder_get_object(builder,"button_color"));
+	gtk_color_button_set_color(color_button,color_transform);
+	
+	free(color_transform);
+	free(choosed_color);
+	fermer_color();
 }
+	//////////////////////////////
+//////////////////////////
 
-int test_grayscale(char *path)
-{
-    printf(" ==== Testing grayscale method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    GrayScale(image);
-    Save_pixbuf("dst/filtre/img_grayscale.png", "png", image);
-    printf("- Image converted in gray scale\n\n");
-
-    printf(" ==== Testing binarize method ====\n");
-    binarize(image, 127);
-    Save_pixbuf("dst/filtre/img_binarized.png", "png", image);
-    printf("- Image binarized\n\n");
-
-    return 0;
-}
-
-int test_fusion(char *path)
-{
-    printf(" ==== Testing fusion method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    Fusion(image,125);
-    Save_pixbuf("dst/filtre/img_fusion.png", "png", image);
-    printf("- Alpha applied to the image\n\n");
-
-    return 0;
-}
-
-int test_histogram(char *path)
-{
-    printf(" ==== Testing histogram method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    image = Create_histo_graph(image);
-
-    printf("- Black histogram generated\n");
-    printf("- Red histogram generated\n");
-    printf("- Green histogram generated\n");
-    printf("- Blue histogram generated\n");
-    printf("- Main histogram generated\n\n");
-
-    return 0;
-}
-
-int test_crypto(char *path)
-{
-    printf(" ==== Testing crypto method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    GdkPixbuf *code;
-    code = Crypto(image);
-
-    Save_pixbuf("dst/filtre/img_encrypted.png", "png", image);
-    Save_pixbuf("dst/filtre/code.png", "png", code);
-
-    Uncrypt(image, code);
-    Save_pixbuf("dst/filtre/img_decrypted.png", "png", image);
-
-    printf("- Code generated\n");
-    printf("- Image crypted \n");
-    printf("- Image decrypted\n\n");
-    
-    return 0;
-}
-
-int test_split(char *path)
-{
-    printf("==== Testing colors split method ====\n");
-    GdkPixbuf *image = Load_image(path);
-    GdkPixbuf** result = Split(image);
-
-    Save_pixbuf("dst/filtre/img_splitRed.png", "png", result[0]);
-    Save_pixbuf("dst/filtre/img_splitGreen.png", "png", result[1]);
-    Save_pixbuf("dst/filtre/img_splitBlue.png", "png", result[2]);
-
-    printf("- Image splitted in 3\n\n");
-    return 0;
-}
-
-int main(int argc, char *argv[])
-{
-    printf("\n");
-
-    Check_dir("dst/filtre/");
-
-    if (argc == 1)
-    {
-	test_scale("src/image/img_3.jpg");
-	test_reverse("src/image/img_2.jpg");
-	test_rotate("src/image/img_2.jpg");
-        test_drawcircle("src/image/img_1.jpg", 70);
-        test_fillcircle("src/image/img_1.jpg", 70);
-	test_fillcolor("src/image/img_3.jpg");
-        test_grayscale("src/image/img_2.jpg");
-        test_contrast("src/image/img_4.jpg");
-        test_motionblur("src/image/img_sansblur.jpg");
-        test_crypto("src/image/img_3.jpg");
-	test_split("src/image/img_1.jpg");
-        test_histogram("src/image/img_2.jpg");
-	test_fusion("src/image/img_11.png");
-
-
-        printf(" ==== Results in dst/filtre/ ==== \n");
+int is_jpg(gchar *string){
+    int i = 0;
+    while(string[i] != '\0'){
+	i++;
+	if(string[i] == '.'){
+	    return string[i+1]=='j' && string[i+2]=='p' && string[i+3]=='g' 
+		|| string[i+1]=='p' && string[i+2]=='n' && string[i+3]=='g';
+	}
     }
-    else if (argc == 3)
-    {
-        char *function = argv[2];
-        if (!strcmp(function, "scale"))
-            test_scale(argv[1]);
-        else if (!strcmp(function, "drawc"))
-            test_drawcircle(argv[1], 70);
-        else if (!strcmp(function, "fillc"))
-            test_fillcircle(argv[1], 70);
-        else if (!strcmp(function, "gray"))
-            test_grayscale(argv[1]);
-        else if (!strcmp(function, "contra"))
-            test_contrast(argv[1]);
-        else if (!strcmp(function, "blur"))
-            test_motionblur(argv[1]);
-        else if (!strcmp(function, "crypto"))
-            test_crypto(argv[1]);
-        else
-            errx(EXIT_FAILURE, "Invalid function name\n \
-		    try scale, drawc, fillc, gray, contra, blur");
-
-        printf(" ==== Results in dst/filtre/ ==== \n");
-    }
-    else
-        errx(EXIT_FAILURE, "Invalid args please use the image path");
-
     return 0;
+}
+
+void fermer_filechooser(){
+    GtkWidget* filechooser;
+    filechooser = GTK_WIDGET(gtk_builder_get_object(builder,"filechooser"));
+    gtk_widget_hide(filechooser);
+
+}
+
+
+void valider_filechooser(GtkButton *button){
+    GtkFileChooser *filechooser;
+    GtkButton *button1 = button;
+    GtkEntry *status;
+    status = GTK_ENTRY(gtk_builder_get_object(builder,"status"));
+    filechooser =
+        GTK_FILE_CHOOSER(gtk_builder_get_object(builder,"filechooser"));
+    gchar *fileName = gtk_file_chooser_get_filename(filechooser);
+
+	if(is_jpg(fileName)){
+	fermer_filechooser(button1);
+	image_surface = gdk_pixbuf_new_from_file(fileName,NULL);
+	width = gdk_pixbuf_get_width(image_surface);
+	height = gdk_pixbuf_get_height(image_surface);
+
+	if(width>1280){
+		ratio = 100*(1280.0/(double)width);
+	}	
+	else if(height>720){
+		ratio = 100*(720.0/(double)height);
+	}
+
+	image_surface = Scale_bilinear(image_surface,ratio,ratio);
+
+	GtkImage *image = 
+	    GTK_IMAGE(gtk_builder_get_object(builder,"image_display"));
+	
+	gtk_image_set_from_pixbuf(image,image_surface);
+	}
+	else{
+	    gtk_entry_set_text(status,"File must be *.jpg");
+	}
+
+	tools_show();
+
+	fermer_filechooser();
+}
+
+void tools_show(){
+	GtkWidget* tools;
+	tools = GTK_WIDGET(gtk_builder_get_object(builder,"tools"));
+	gtk_widget_show(tools);
+	
+}
+
+void tools_hide(){
+	GtkWidget* tools;
+	tools = GTK_WIDGET(gtk_builder_get_object(builder,"tools"));
+	gtk_widget_hide(tools);
+
+}
+
+
+///////////*Tools*/////////////////
+void update_image(){
+	GtkImage *image = 
+		    GTK_IMAGE(gtk_builder_get_object(builder,"image_display"));
+	
+	gtk_image_set_from_pixbuf(image,image_surface);
+	
+}
+
+void greyscale_button(){
+	GrayScale(image_surface);
+	update_image();
+}
+
+
+void negative_button(){
+	//Negative(image_surface);
+	update_image();
+}
+
+void brigthness_button(){
+	Brightness(image_surface,0);
+	update_image();
+}
+
+int main( int    argc,
+      char **argv )
+{
+
+    //Interface/////////////////////////////////////////////
+
+    GtkWidget  *window;
+    GError     *error = NULL;
+    /* Init GTK+ */
+    gtk_init( &argc, &argv );
+    /* Create new GtkBuilder object */
+    builder = gtk_builder_new();
+    /* Load UI from file. If error occurs, report it and quit application.
+     * Replace "tut.glade" with your saved project. */
+    if( ! gtk_builder_add_from_file( builder, "interface1.glade", &error ) )
+    {
+        g_warning( "%s", error->message );
+        g_free( error );
+        return( 1 );
+    }
+    /* Get main window pointer from UI */
+    window = GTK_WIDGET(gtk_builder_get_object( builder, "window1" ));
+    
+    gtk_builder_connect_signals(builder,NULL);
+    /* Destroy builder, since we don't need it anymore */
+    //g_object_unref( G_OBJECT( builder ) );
+     
+    /* Show window. All other widgets are automatically shown by GtkBuilder */
+    gtk_widget_show( window );
+    /* Start main loop */
+    gtk_main();
+
+
+
+    return( 0 );
 }

@@ -62,7 +62,7 @@ GdkPixbuf* Apply_matrix(GdkPixbuf* image, struct convolution_matrix* matrix)
 struct convolution_matrix* InitMotionBlur(int size, int val) {
 
   if (size % 2 == 0)
-    fprintf(stderr, "Need a ode matrix's size");
+    fprintf(stderr, "Need a odd matrix's size");
   int NbElt = size * size;
   struct convolution_matrix *mat = calloc(1, sizeof(struct convolution_matrix));
   mat->size = size;
