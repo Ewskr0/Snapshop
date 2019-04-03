@@ -41,3 +41,15 @@ void Gradient_map(GdkPixbuf *image, struct color *dark, struct color *bright)
   }
 
 }
+
+void Negative(GdkPixbuf* image)
+{
+  int height = gdk_pixbuf_get_height(image);
+  int rowstride = gdk_pixbuf_get_rowstride(image);
+  guchar* pixels = gdk_pixbuf_get_pixels(image);
+
+  for(int i = 0; i < height * rowstride; ++i)
+  {
+    pixels[i] = (guchar)255 - pixels[i];
+  }
+}

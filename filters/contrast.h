@@ -11,5 +11,6 @@
 void Brightness(GdkPixbuf *image, int offset);
 void Contrast(GdkPixbuf *image, int offset);
 void Gradient_map(GdkPixbuf *image, struct color *dark, struct color *bright);
+void Negative(GdkPixbuf* image);
 
 #endif
