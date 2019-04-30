@@ -90,3 +90,38 @@ GdkPixbuf *Create_histo_graph(GdkPixbuf *image)
 
   return graphAll;
 }
+
+void GreyNormalize(GdkPixbuf *image){
+  int width = gdk_pixbuf_get_width(image);
+  int height = gdk_pixbuf_get_height(image);
+
+  int min = 255, max = 0;
+  double scale;
+
+  struct histogram *histo = Histogram(image);
+
+
+  for(int i = 0; p < 256; p++) {
+    if(histo->light[i] <  min) min = i;
+    if(histo->light[i] >  max) max = i;
+  }
+  
+  scale = 255.0 / (max-min);
+
+  for(int y = 0; y <  height; y++)
+  {
+    for(int x = 0; x < width; x++)
+    {
+      guchar* cur_pixel = Get_pixel(image, x, y);
+      int red = cur_pixel[0];
+
+      int gray = red;
+      gray -= min;
+      gray *= scale;
+
+      cur_pixel[0] = gray;
+      cur_pixel[1] = gray;
+      cur_pixel[2] = gray;
+    }
+  }
+}
