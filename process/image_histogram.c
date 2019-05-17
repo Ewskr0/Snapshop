@@ -1,7 +1,8 @@
 #include "image_histogram.h"
 #include <math.h>
 
-struct histogram *Histogram(GdkPixbuf *image) {
+struct histogram *Histogram(GdkPixbuf *image)
+{
   int width = gdk_pixbuf_get_width(image);
   int height = gdk_pixbuf_get_height(image);
   struct histogram *h = calloc(1, sizeof(struct histogram));
@@ -11,8 +12,10 @@ struct histogram *Histogram(GdkPixbuf *image) {
   int *green = h->green;
   int *blue = h->blue;
 
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
+  for (int y = 0; y < height; ++y)
+  {
+    for (int x = 0; x < width; ++x)
+    {
       guchar *pixel = Get_pixel(image, x, y);
       light[(pixel[0] + pixel[1] + pixel[2]) / 3] += 1;
       red[pixel[0]] += 1;
@@ -23,9 +26,11 @@ struct histogram *Histogram(GdkPixbuf *image) {
   return h;
 }
 
-static int Get_max_histo(struct histogram *histo) {
+static int Get_max_histo(struct histogram *histo)
+{
   int max = 0;
-  for (int i = 0; i < 256; ++i) {
+  for (int i = 0; i < 256; ++i)
+  {
     max = max < histo->light[i] ? histo->light[i] : max;
     max = max < histo->red[i] ? histo->red[i] : max;
     max = max < histo->green[i] ? histo->green[i] : max;
@@ -34,7 +39,8 @@ static int Get_max_histo(struct histogram *histo) {
   return max;
 }
 
-GdkPixbuf *Create_histo_graph(GdkPixbuf *image) {
+GdkPixbuf *Create_histo_graph(GdkPixbuf *image)
+{
   struct histogram *histo = Histogram(image);
   GdkPixbuf *graphBlack = Load_image("./src/histogram/emptyGraph.jpg");
   GdkPixbuf *graphRed = Load_image("./src/histogram/emptyGraph.jpg");
@@ -48,7 +54,8 @@ GdkPixbuf *Create_histo_graph(GdkPixbuf *image) {
   struct color blue_color = {0, 0, 255, 100};
   struct color black_color = {0, 0, 0, 100};
 
-  for (int i = 0; i < 256; ++i) {
+  for (int i = 0; i < 256; ++i)
+  {
     // graphBlack
     struct box black_box = {
         i * 2, 245 - (histo->light[i] * 100 / correction_factor) * 2, i * 2,
@@ -100,49 +107,51 @@ GdkPixbuf *Create_histo_graph(GdkPixbuf *image) {
   return graphAll;
 }
 
-void HistoNormalize(GdkPixbuf *image) {
+void HistogramNormalize(GdkPixbuf *image)
+{
   int width = gdk_pixbuf_get_width(image);
   int height = gdk_pixbuf_get_height(image);
 
-  int minR = 25500, maxR = 0;
-  int minG = 25500, maxG = 0;
-  int minB = 25500, maxB = 0;
-
   struct histogram *histo = Histogram(image);
 
-  for (int i = 0; i < 255; ++i) {
-    if (histo->red[i] + histo->red[i + 1] <= histo->red[minR])
-      minR = i;
-    if (histo->red[i] > histo->red[maxR])
-      maxR = i;
-    if (histo->green[i] + histo->red[i + 1] <= histo->green[minG])
-      minG = i;
-    if (histo->green[i] > histo->green[maxG])
-      maxG = i;
-    if (histo->blue[i] + histo->red[i + 1] <= histo->blue[minB])
-      minB = i;
-    if (histo->blue[i] > histo->blue[maxB])
-      maxB = i;
-  }
+  int minR = histo->red[100], minG = histo->green[100], minB = histo->blue[100];
+  int maxR = histo->red[100], maxG = histo->green[100], maxB = histo->blue[100];
 
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
+  for (int i = 0; i < 256; ++i)
+  {
+    maxR = maxR < histo->red[i] ? histo->red[i] : maxR;
+    maxG = maxG < histo->green[i] ? histo->green[i] : maxG;
+    maxB = maxB < histo->blue[i] ? histo->blue[i] : maxB;
+    minR = minR > histo->red[i] ? histo->red[i] : minR;
+    minG = minG > histo->green[i] ? histo->green[i] : minG;
+    minB = minB > histo->blue[i] ? histo->blue[i] : minB;
+  }
+  printf("%i, %i, %i \n", maxR, maxG, maxB);
+  printf("%i, %i, %i \n", minR, minG, minB);
+
+  for (int y = 0; y < height; y++)
+  {
+    for (int x = 0; x < width; x++)
+    {
+
       guchar *cur_pixel = Get_pixel(image, x, y);
+
       int red = cur_pixel[0];
       int green = cur_pixel[1];
       int blue = cur_pixel[2];
 
-      cur_pixel[0] = ((red - histo->red[minR]) * 255) /
-                     (histo->red[maxR] - histo->red[minR]);
-      cur_pixel[1] = ((green - histo->green[minG]) * 255) /
-                     (histo->green[maxG] - histo->green[minG]);
-      cur_pixel[2] = ((blue - histo->blue[minB]) * 255) /
-                     (histo->blue[maxB] - histo->blue[minB]);
+      red = 255.0 * (red - minR) / (maxR - minR);
+      green = 255.0 * (green - minG) / (maxG - minG);
+      blue = 255.0 * (blue - minB) / (maxB - minB);
+      cur_pixel[0] = red;
+      cur_pixel[1] = green;
+      cur_pixel[2] = blue;
     }
   }
 }
 
-void HistogramEqualisation(GdkPixbuf *image) {
+void HistogramEqualisation(GdkPixbuf *image)
+{
 
   int width = gdk_pixbuf_get_width(image);
   int height = gdk_pixbuf_get_height(image);
@@ -159,7 +168,8 @@ void HistogramEqualisation(GdkPixbuf *image) {
   int green_level[256] = {0};
   int blue_level[256] = {0};
 
-  for (int i = 0; i < 256; i++) {
+  for (int i = 0; i < 256; i++)
+  {
     currR += histo->red[i];
     currG += histo->green[i];
     currB += histo->blue[i];
@@ -169,8 +179,10 @@ void HistogramEqualisation(GdkPixbuf *image) {
     blue_level[i] = round((((float)currB) * 255) / total);
   }
 
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
+  for (int y = 0; y < height; y++)
+  {
+    for (int x = 0; x < width; x++)
+    {
 
       guchar *cur_pixel = Get_pixel(image, x, y);
 

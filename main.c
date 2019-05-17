@@ -30,7 +30,8 @@ int height = 0;
 
 int ratio = 100;
 
-void buttonload_clicked(GtkButton *button) {
+void buttonload_clicked(GtkButton *button)
+{
 
   GtkWidget *popup;
   popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
@@ -38,28 +39,34 @@ void buttonload_clicked(GtkButton *button) {
   gtk_widget_show(popup);
 }
 //////**NEW FILE**///////
-void button_new(GtkButton *button) {
+void button_new(GtkButton *button)
+{
   GtkWidget *newfile;
   newfile = GTK_WIDGET(gtk_builder_get_object(builder, "newfile"));
   gtk_widget_show(newfile);
 }
 
-void fermer_newfile() {
+void fermer_newfile()
+{
   GtkWidget *newfile;
   newfile = GTK_WIDGET(gtk_builder_get_object(builder, "newfile"));
   gtk_widget_hide(newfile);
 }
 
-void valider_newfile() {
+void valider_newfile()
+{
   int width, height;
   width = atoi(gtk_entry_get_text(
       GTK_ENTRY(gtk_builder_get_object(builder, "entry_width"))));
   height = atoi(gtk_entry_get_text(
       GTK_ENTRY(gtk_builder_get_object(builder, "entry_height"))));
 
-  if (width > 1280) {
+  if (width > 1280)
+  {
     ratio = 100 * (1280.0 / (double)width);
-  } else if (height > 720) {
+  }
+  else if (height > 720)
+  {
     ratio = 100 * (720.0 / (double)height);
   }
 
@@ -96,19 +103,22 @@ void valider_newfile() {
   gtk_widget_show(tools);
 }
 /////**Color Dialog**///////////
-void button_color() {
+void button_color()
+{
   GtkWidget *color;
   color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
   gtk_widget_show(color);
 }
 
-void fermer_color() {
+void fermer_color()
+{
   GtkWidget *color;
   color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
   gtk_widget_hide(color);
 }
 
-void valider_color() {
+void valider_color()
+{
   GtkColorChooser *color;
   color = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "color"));
   GdkRGBA *choosed_color = malloc(sizeof(GdkRGBA));
@@ -131,23 +141,28 @@ void valider_color() {
 }
 //////////////////////////////
 //////////////////////////
-void tools_show() {
+void tools_show()
+{
   GtkWidget *tools;
   tools = GTK_WIDGET(gtk_builder_get_object(builder, "tools"));
   gtk_widget_show(tools);
 }
 
-void tools_hide() {
+void tools_hide()
+{
   GtkWidget *tools;
   tools = GTK_WIDGET(gtk_builder_get_object(builder, "tools"));
   gtk_widget_hide(tools);
 }
 
-int is_jpg(gchar *string) {
+int is_jpg(gchar *string)
+{
   int i = 0;
-  while (string[i] != '\0') {
+  while (string[i] != '\0')
+  {
     i++;
-    if (string[i] == '.') {
+    if (string[i] == '.')
+    {
       return string[i + 1] == 'j' && string[i + 2] == 'p' &&
              string[i + 3] == 'g';
       //|| string[i+1]=='p' && string[i+2]=='n' && string[i+3]=='g';
@@ -156,13 +171,15 @@ int is_jpg(gchar *string) {
   return 0;
 }
 
-void fermer_filechooser() {
+void fermer_filechooser()
+{
   GtkWidget *filechooser;
   filechooser = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
   gtk_widget_hide(filechooser);
 }
 
-void valider_filechooser(GtkButton *button) {
+void valider_filechooser(GtkButton *button)
+{
   GtkFileChooser *filechooser;
   GtkButton *button1 = button;
   GtkEntry *status;
@@ -178,9 +195,12 @@ void valider_filechooser(GtkButton *button) {
   width = gdk_pixbuf_get_width(image_surface);
   height = gdk_pixbuf_get_height(image_surface);
 
-  if (width > 1280) {
+  if (width > 1280)
+  {
     ratio = 100 * (1280.0 / (double)width);
-  } else if (height > 720) {
+  }
+  else if (height > 720)
+  {
     ratio = 100 * (720.0 / (double)height);
   }
 
@@ -201,57 +221,67 @@ else
 }
 
 ///////////*Tools*/////////////////
-void update_image() {
+void update_image()
+{
   GtkImage *image = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
   gtk_image_set_from_pixbuf(image, image_surface);
 }
 
-void greyscale_button() {
+void greyscale_button()
+{
   GrayScale(image_surface);
   update_image();
 }
 
-void negative_button() {
+void negative_button()
+{
   Negative(image_surface);
   update_image();
 }
 
-void brigthness_button() {
+void brigthness_button()
+{
   Brightness(image_surface, 100);
   update_image();
 }
 
-void encrypt_button() {
+void encrypt_button()
+{
   image_code = Crypto(image_surface);
   update_image();
 }
 
-void uncrypt_button() {
+void uncrypt_button()
+{
   Uncrypt(image_surface, image_code);
   update_image();
 }
 
-void reverse_vert_button() {
+void reverse_vert_button()
+{
   ReverseVert(image_surface);
   update_image();
 }
 
-void reverse_hor_button() {
+void reverse_hor_button()
+{
   ReverseHor(image_surface);
   update_image();
 }
 int rotation = 1;
-void rotation_button() {
+void rotation_button()
+{
   image_surface = Rotate(image_surface, rotation);
   rotation++;
   update_image();
 }
 
-int main(int argc, char **argv) {
-  if (argc > 1) {
-    test_histo_methods("src/image/img_2.jpg");
-    // consoleTests();
+int main(int argc, char **argv)
+{
+  if (argc > 1)
+  {
+    consoleTests();
     return 1;
   }
   // Interface/////////////////////////////////////////////
@@ -264,7 +294,8 @@ int main(int argc, char **argv) {
   builder = gtk_builder_new();
   /* Load UI from file. If error occurs, report it and quit application.
    * Replace "tut.glade" with your saved project. */
-  if (!gtk_builder_add_from_file(builder, "interface1.glade", &error)) {
+  if (!gtk_builder_add_from_file(builder, "interface1.glade", &error))
+  {
     g_warning("%s", error->message);
     g_free(error);
     return (1);

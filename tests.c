@@ -19,7 +19,8 @@
 
 #include "filters/contrast.h"
 
-int test_motionblur(char *path) {
+int test_motionblur(char *path)
+{
   struct convolution_matrix *convo = InitMotionBlur(5, 3);
   GdkPixbuf *image = Load_image(path);
 
@@ -41,7 +42,8 @@ int test_motionblur(char *path) {
   return 0;
 }
 
-int test_contrast(char *path) {
+int test_contrast(char *path)
+{
   int offset = 30;
   GdkPixbuf *image_bright = Load_image(path);
   GdkPixbuf *image_contr = Load_image(path);
@@ -59,7 +61,8 @@ int test_contrast(char *path) {
   return 0;
 }
 
-int test_scale(char *path) {
+int test_scale(char *path)
+{
   printf(" ==== Testing image_scale method ====\n");
   GdkPixbuf *image = Load_image(path);
 
@@ -71,7 +74,8 @@ int test_scale(char *path) {
   return 0;
 }
 
-int test_reverse(char *path) {
+int test_reverse(char *path)
+{
   printf(" ==== Testing image_reverse methods ====\n");
   GdkPixbuf *image = Load_image(path);
   GdkPixbuf *image2 = Load_image(path);
@@ -88,7 +92,8 @@ int test_reverse(char *path) {
   return 0;
 }
 
-int test_rotate(char *path) {
+int test_rotate(char *path)
+{
   printf(" ==== Testing image_rotate method ====\n");
   GdkPixbuf *image = Load_image(path);
 
@@ -106,7 +111,8 @@ int test_rotate(char *path) {
   return 0;
 }
 
-int test_drawcircle(char *path, int r) {
+int test_drawcircle(char *path, int r)
+{
   struct color *Couleur = malloc(sizeof(struct color));
   Couleur->red = 255;
   Couleur->green = 255;
@@ -121,7 +127,8 @@ int test_drawcircle(char *path, int r) {
   return 0;
 }
 
-int test_fillcircle(char *path, int r) {
+int test_fillcircle(char *path, int r)
+{
   struct color *Couleur = malloc(sizeof(struct color));
   Couleur->red = 255;
   Couleur->green = 255;
@@ -137,7 +144,8 @@ int test_fillcircle(char *path, int r) {
   return 0;
 }
 
-int test_fillcolor(char *path) {
+int test_fillcolor(char *path)
+{
   printf(" ==== Testing fillcolor method ====\n");
   GdkPixbuf *image = Load_image(path);
   struct box *toFill = malloc(sizeof(struct box));
@@ -157,7 +165,8 @@ int test_fillcolor(char *path) {
   return 0;
 }
 
-int test_grayscale(char *path) {
+int test_grayscale(char *path)
+{
   printf(" ==== Testing grayscale method ====\n");
   GdkPixbuf *image = Load_image(path);
   GrayScale(image);
@@ -172,7 +181,8 @@ int test_grayscale(char *path) {
   return 0;
 }
 
-int test_fusion(char *path) {
+int test_fusion(char *path)
+{
   printf(" ==== Testing fusion method ====\n");
   GdkPixbuf *image = Load_image(path);
   Fusion(image, 125);
@@ -182,7 +192,8 @@ int test_fusion(char *path) {
   return 0;
 }
 
-int test_histogram(char *path) {
+int test_histogram(char *path)
+{
   printf(" ==== Testing histogram method ====\n");
   GdkPixbuf *image = Load_image(path);
 
@@ -194,15 +205,23 @@ int test_histogram(char *path) {
   return 0;
 }
 
-int test_histo_methods(char *path) {
-  printf(" ==== Testing histogram method ====\n");
+int test_histo_equalisation(char *path)
+{
+  printf(" ==== Testing histogram equalisation ====\n");
   GdkPixbuf *image = Load_image(path);
-
   HistogramEqualisation(image);
   Save_pixbuf("dst/filtre/img_histo_equalisation.png", "png", image);
 }
+int test_histo_normalize(char *path)
+{
+  printf(" ==== Testing histogram normalize ====\n");
+  GdkPixbuf *image = Load_image(path);
+  HistogramNormalize(image);
+  Save_pixbuf("dst/filtre/img_histo_normalize.png", "png", image);
+}
 
-int test_crypto(char *path) {
+int test_crypto(char *path)
+{
   printf(" ==== Testing crypto method ====\n");
   GdkPixbuf *image = Load_image(path);
   GdkPixbuf *code;
@@ -221,7 +240,8 @@ int test_crypto(char *path) {
   return 0;
 }
 
-int test_split(char *path) {
+int test_split(char *path)
+{
   printf("==== Testing colors split method ====\n");
   GdkPixbuf *image = Load_image(path);
   GdkPixbuf **result = Split(image);
@@ -234,12 +254,15 @@ int test_split(char *path) {
   return 0;
 }
 
-int consoleTests() {
+int consoleTests()
+{
   printf("\n");
 
   Check_dir("dst/filtre/");
   Check_dir("dst/histogram/");
 
+  test_histo_equalisation("src/image/img_2.jpg");
+  test_histo_normalize("src/image/img_5.jpg");
   test_scale("src/image/img_3.jpg");
   test_reverse("src/image/img_2.jpg");
   test_rotate("src/image/img_2.jpg");

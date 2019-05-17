@@ -13,6 +13,6 @@ struct histogram {
 
 struct histogram *Histogram(GdkPixbuf *image);
 GdkPixbuf *Create_histo_graph(GdkPixbuf *image);
-void HistoNormalize(GdkPixbuf *image);
+void HistogramNormalize(GdkPixbuf *image);
 void HistogramEqualisation(GdkPixbuf *image);
 #endif
