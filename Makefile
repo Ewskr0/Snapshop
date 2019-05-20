@@ -1,6 +1,6 @@
 ## Makefile
 
-CC=gcc -rdynamic -MMD -D_XOPEN_SOURCE=500
+CC=gcc -rdynamic -MMD -g -D_XOPEN_SOURCE=500
 
 CPPFLAGS= `pkg-config --cflags gtk+-3.0`
 CFLAGS= -Wall -Wextra -std=c99 -O3 -g
