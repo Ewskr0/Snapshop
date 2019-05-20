@@ -647,8 +647,8 @@ void button_press_event(GtkWidget *widget, GdkEventButton *event)
 	if (selected_event < 0 || image_surface == NULL)
 		return;
 	int x, y;
-	x = event->x;
-	y = event->y;
+	x = (width - 1280) / 2 + event->x;
+	y = (height - 720) / 2 + event->y;
 
 	if (selected_event == 1)
 		return point_rect();
@@ -661,8 +661,9 @@ void motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 	if (selected_event < 0 || image_surface == NULL)
 		return;
 	int x, y;
-	x = event->x;
-	y = event->y;
+	x = (width - 1280) / 2 + event->x;
+	y = (height - 720) / 2 + event->y;
+
 	if (selected_event < 0)
 		return;
 	if (selected_event == 2)
