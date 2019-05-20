@@ -94,6 +94,8 @@ GtkEntry *file;
 GdkPixbuf *image_surface;
 GdkPixbuf *image_code;
 
+
+
 int width = 0;
 int height = 0;
 
@@ -106,6 +108,8 @@ void buttonload_clicked()
 
 	GtkWidget *popup;
 	popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
+
+	//root = gdk_get_default_root_window ();
 
 	gtk_widget_show(popup);
 }
@@ -355,9 +359,12 @@ else
 		gtk_entry_set_text(status, "File must be *.jpg");
 	}*/
 
+
+
 	tools_show();
 	asbeenload = 1;
 	fermer_filechooser();
+
 
 
 	//free(filechooser);
@@ -443,21 +450,32 @@ void rotation_button()
 
 
 //////SETTINGS DRAW////////
+
 void settings_draw(){
 	GtkWidget *drawwindow;
 	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_window"));
 	gtk_widget_show(drawwindow);
+
+  
+ 
+  // Récupération de la fenêtre root
+  
 	//free(drawwindow);
 }
 
 gint x_center, y_center;
+int select = 0;
 
 void select_center(){
+	select = 1;
+}
+
+void point_center(){
   GdkWindow *root = NULL;
   
- 
   // Récupération de la fenêtre root
   root = gdk_get_default_root_window ();
+if(select){
   if (root==NULL) g_printerr ("root = NULL !!!");
  
   // Récupération du pointeur de la souris
@@ -469,7 +487,9 @@ void select_center(){
   // Mise à jour des GtkLabel pour afficher les coordonnées.
   gchar *text = g_strdup_printf("%d , %d", x_center,y_center);
   gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, "label_coord")), text);
+  select = 0;
   g_free(text);
+}
 }
 
 void fermer_draw(){
@@ -480,25 +500,83 @@ void fermer_draw(){
 }
 
 void valider_draw(){
-	//GtkToggleButton* rectangle = (gtk_builder_get_object(builder, "isrectangle"));
+	GtkToggleButton* fill = (gtk_builder_get_object(builder, "fill"));
 	//GtkImage* image_surface2 = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 	//GdkPixbuf* image = gtk_image_get_pixbuf(image_surface2);
-	//GtkEntry* radius_entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"));
-	//int radius = (int) (gtk_entry_get_text(radius_entry));
-
+	GtkEntry* radius_entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"));
+	int radius = atoi((gtk_entry_get_text(radius_entry)));
 	struct color color = {0,0,0,0};
 	//struct box box = {x_center-radius,y_center}
 	/*if(gtk_toggle_button_is_active(rectangle)){
 		Fill_color2(image,color,box);		
 	}
 	else{*/
-	//fermer_draw();
-	testCircleDraw(image_surface,&color,400,400/*x_center,y_center*/,100,1);
+	testCircleDraw(image_surface,&color,x_center,y_center,radius,gtk_toggle_button_get_active(fill));
 
 	update_image();
+	fermer_draw();
 }
 
+int select_rect = 0;
+struct box box = {0,0,0,0};
 
+void fermer_rect(){
+	GtkWidget *drawwindow;
+	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
+	select_rect = 0;
+	gtk_widget_hide(drawwindow);
+}
+
+void select_rectangle(){
+	select_rect = 1;
+}
+
+void settings_rect(){
+	GtkWidget *drawwindow;
+	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
+	gtk_widget_show(drawwindow);
+}
+
+void point_rect(){
+  GdkWindow *root = NULL;
+  gint x,y;
+  root = gdk_get_default_root_window ();
+if(select_rect>0){
+	printf("%i\n",select_rect);
+  if (root==NULL) g_printerr ("root = NULL !!!");
+ 	gchar* rect;
+  // Récupération du pointeur de la souris
+
+  GdkDevice *pointer = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (root)));
+ 
+  // Récupération des coordonnées de la souris
+  gdk_window_get_device_position (root, pointer, &x, &y, NULL);
+  if(select_rect==2){
+  	printf("%i\n",2);
+  box.x2 = x;
+  box.y2 = y;
+  rect = "rect_2";
+} else {
+	printf("%i\n",1);
+	box.x1 = x;
+	box.y1= y;
+	rect = "rect_1";
+}
+ 
+  // Mise à jour des GtkLabel pour afficher les coordonnées.
+  gchar *text = g_strdup_printf("%d , %d", x,y);
+  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, rect)), text);
+  select_rect += 1;
+  g_free(text);
+	}
+}
+
+void valider_rect(){
+	struct color col = {0,0,0,0};
+	Fill_color2(image_surface,&col,&box);
+	fermer_rect();
+	update_image();
+}
 
 void undo_button()
 {
