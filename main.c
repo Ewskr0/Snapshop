@@ -384,10 +384,10 @@ void update_image()
 	if (top >= MAXSIZE)
 	{
 		pop_head();
-		printf("9\n");
+		//printf("9\n");
 	}
 
-	printf("%i\n", top);
+	//printf("%i\n", top);
 
 	GdkPixbuf *res = copy_pixbuf(image_surface);
 	push(res);
@@ -465,37 +465,13 @@ void settings_draw()
 	//free(drawwindow);
 }
 
-gint x_center, y_center;
-int select = 0;
-
-void select_center()
+int radius_circle = 10;
+int fill_circle = 0;
+struct color circle_color = {255, 120, 0, 100};
+void draw_circle(int x, int y)
 {
-	select = 1;
-}
-
-void point_center()
-{
-	GdkWindow *root = NULL;
-
-	// Récupération de la fenêtre root
-	root = gdk_get_default_root_window();
-	if (select)
-	{
-		if (root == NULL)
-			g_printerr("root = NULL !!!");
-
-		// Récupération du pointeur de la souris
-		GdkDevice *pointer = gdk_device_manager_get_client_pointer(gdk_display_get_device_manager(gdk_window_get_display(root)));
-
-		// Récupération des coordonnées de la souris
-		gdk_window_get_device_position(root, pointer, &x_center, &y_center, NULL);
-
-		// Mise à jour des GtkLabel pour afficher les coordonnées.
-		gchar *text = g_strdup_printf("%d , %d", x_center, y_center);
-		gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, "label_coord")), text);
-		select = 0;
-		g_free(text);
-	}
+	testCircleDraw(image_surface, &circle_color, x, y, radius_circle, fill_circle);
+	update_image();
 }
 
 void fermer_draw()
@@ -509,92 +485,65 @@ void fermer_draw()
 void valider_draw()
 {
 	GtkToggleButton *fill = (gtk_builder_get_object(builder, "fill"));
-	//GtkImage* image_surface2 = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-	//GdkPixbuf* image = gtk_image_get_pixbuf(image_surface2);
+	fill_circle = gtk_toggle_button_get_active(fill);
 	GtkEntry *radius_entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"));
-	int radius = atoi((gtk_entry_get_text(radius_entry)));
-	struct color color = {0, 0, 0, 0};
-	//struct box box = {x_center-radius,y_center}
-	/*if(gtk_toggle_button_is_active(rectangle)){
-		Fill_color2(image,color,box);		
-	}
-	else{*/
-	testCircleDraw(image_surface, &color, x_center, y_center, radius, gtk_toggle_button_get_active(fill));
-
-	update_image();
-	fermer_draw();
+	radius_circle = atoi((gtk_entry_get_text(radius_entry)));
 }
 
-int select_rect = 0;
-struct box box = {0, 0, 0, 0};
+struct box draw_rect_box = {0, 0, 0, 0};
+struct color rect_color = {0, 2550, 0, 100};
+int fill_rect = 0;
 
 void fermer_rect()
 {
 	GtkWidget *drawwindow;
 	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
-	select_rect = 0;
 	gtk_widget_hide(drawwindow);
-}
-
-void select_rectangle()
-{
-	selected_event = 1;
-	select_rect = 1;
 }
 
 void settings_rect()
 {
+	selected_event = 3;
 	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "5"));
+	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
 	gtk_widget_show(drawwindow);
 }
 
-void point_rect()
+void draw_rect(int x, int y)
 {
-	GdkWindow *root = NULL;
-	gint x, y;
-	root = gdk_get_default_root_window();
-	if (select_rect > 0)
+	draw_rect_box.x1 = x;
+	draw_rect_box.y1 = y;
+}
+
+void draw_rect2(int x, int y)
+{
+	if (x < draw_rect_box.x1)
 	{
-		printf("%i\n", select_rect);
-		if (root == NULL)
-			g_printerr("root = NULL !!!");
-		gchar *rect;
-		// Récupération du pointeur de la souris
-
-		GdkDevice *pointer = gdk_device_manager_get_client_pointer(gdk_display_get_device_manager(gdk_window_get_display(root)));
-
-		// Récupération des coordonnées de la souris
-		gdk_window_get_device_position(root, pointer, &x, &y, NULL);
-		if (select_rect == 2)
-		{
-			printf("%i\n", 2);
-			box.x2 = x;
-			box.y2 = y;
-			rect = "rect_2";
-		}
-		else
-		{
-			printf("%i\n", 1);
-			box.x1 = x;
-			box.y1 = y;
-			rect = "rect_1";
-		}
-
-		// Mise à jour des GtkLabel pour afficher les coordonnées.
-		gchar *text = g_strdup_printf("%d , %d", x, y);
-		gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, rect)), text);
-		select_rect += 1;
-		g_free(text);
+		draw_rect_box.x2 = draw_rect_box.x1;
+		draw_rect_box.x1 = x;
 	}
+	else
+	{
+		draw_rect_box.x2 = x;
+	}
+	if (y < draw_rect_box.y1)
+	{
+		draw_rect_box.y2 = draw_rect_box.y1;
+		draw_rect_box.y1 = y;
+	}
+	else
+	{
+		draw_rect_box.y2 = y;
+	}
+
+	Fill_color2(image_surface, &rect_color, &draw_rect_box);
+	update_image();
 }
 
 void valider_rect()
 {
-	struct color col = {0, 0, 0, 0};
-	Fill_color2(image_surface, &col, &box);
-	fermer_rect();
-	update_image();
+	GtkToggleButton *fill = (gtk_builder_get_object(builder, "fill"));
+	fill_rect = gtk_toggle_button_get_active(fill);
 }
 
 void undo_button()
@@ -623,7 +572,7 @@ void pencil_button()
 	return;
 }
 
-struct color pencil_color = {0, 0, 0, 0};
+struct color pencil_color = {30, 255, 255, 100};
 int pencil_radius = 5;
 void validate_pencil_radius()
 {
@@ -651,9 +600,23 @@ void button_press_event(GtkWidget *widget, GdkEventButton *event)
 	y = (height - 720) / 2 + event->y;
 
 	if (selected_event == 1)
-		return point_rect();
+		return draw_circle(x, y);
 	if (selected_event == 2)
 		return draw_pencil(x, y, 10);
+	if (selected_event == 3)
+		return draw_rect(x, y);
+}
+
+void button_release_event(GtkWidget *widget, GdkEventButton *event)
+{
+	if (selected_event < 0 || image_surface == NULL)
+		return;
+	int x, y;
+	x = (width - 1280) / 2 + event->x;
+	y = (height - 720) / 2 + event->y;
+
+	if (selected_event == 3)
+		return draw_rect2(x, y);
 }
 
 void motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
