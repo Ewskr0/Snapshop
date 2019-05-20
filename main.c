@@ -20,73 +20,85 @@
 #include "tests.h"
 #include "filters/contrast.h"
 
-
 ///////**STACK FUNCTION**/////////////////////////
 int MAXSIZE = 15;
-GdkPixbuf* stack[];
+GdkPixbuf *stack[];
 int top = -1;
+int selected_event = -1;
 
-int isempty() {
+int isempty()
+{
 
-   if(top == -1)
-      return 1;
-   else
-      return 0;
+	if (top == -1)
+		return 1;
+	else
+		return 0;
 }
-   
-int isfull() {
 
-   if(top == MAXSIZE){
-	return 1;
+int isfull()
+{
+
+	if (top == MAXSIZE)
+	{
+		return 1;
 	}
-   else{
-      return 0;
+	else
+	{
+		return 0;
 	}
 }
 
-int peek() {
-   return stack[top];
+int peek()
+{
+	return stack[top];
 }
 
-GdkPixbuf* pop() {
-   GdkPixbuf* data;
-	
-   if(!isempty()) {
-      data = stack[top];
-      top = top - 1;   
-      return data;
-   } else {
-      printf("Could not retrieve data, Stack is empty.\n");
-   }
+GdkPixbuf *pop()
+{
+	GdkPixbuf *data;
+
+	if (!isempty())
+	{
+		data = stack[top];
+		top = top - 1;
+		return data;
+	}
+	else
+	{
+		printf("Could not retrieve data, Stack is empty.\n");
+	}
 }
 
-int push(GdkPixbuf* data) {
+int push(GdkPixbuf *data)
+{
 
-   if(!isfull()) {
-      top = top + 1;   
-      stack[top] = data;
-   } else {
-      printf("Could not insert data, Stack is full.\n");
-   }
+	if (!isfull())
+	{
+		top = top + 1;
+		stack[top] = data;
+	}
+	else
+	{
+		printf("Could not insert data, Stack is full.\n");
+	}
 }
 
-int pop_head(){
-	if(isempty())
+int pop_head()
+{
+	if (isempty())
 		printf("Cannot pop head because stack is empty.\n");
-	else{
-		GdkPixbuf* tmp;
-		for(int i = top; i>1; i--){
-			tmp = stack[i-1];
-			stack[i-1] = stack[i];
+	else
+	{
+		GdkPixbuf *tmp;
+		for (int i = top; i > 1; i--)
+		{
+			tmp = stack[i - 1];
+			stack[i - 1] = stack[i];
 		}
 		top--;
 	}
 }
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 GtkBuilder *builder;
 GtkEntry *file;
@@ -94,14 +106,12 @@ GtkEntry *file;
 GdkPixbuf *image_surface;
 GdkPixbuf *image_code;
 
-
-
 int width = 0;
 int height = 0;
 
 int ratio = 100;
 
-gchar* fileload;
+gchar *fileload;
 
 void buttonload_clicked()
 {
@@ -114,10 +124,11 @@ void buttonload_clicked()
 	gtk_widget_show(popup);
 }
 
-GdkPixbuf* copy_pixbuf(GdkPixbuf* image){
+GdkPixbuf *copy_pixbuf(GdkPixbuf *image)
+{
 	width = gdk_pixbuf_get_width(image);
 	height = gdk_pixbuf_get_height(image);
-	GdkPixbuf* copy = gdk_pixbuf_copy(image);
+	GdkPixbuf *copy = gdk_pixbuf_copy(image);
 	//GdkPixbuf* copy = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 0, 8, width, height);
 	/*for(int i = 0; i < width; i++){
 		for(int j = 0; j < height; j++){
@@ -127,7 +138,7 @@ GdkPixbuf* copy_pixbuf(GdkPixbuf* image){
 	return copy;
 }
 ////////////////////**FILE**//////////////////////////
-	//////**NEW FILE**///////
+//////**NEW FILE**///////
 void button_new()
 {
 	GtkWidget *newfile;
@@ -176,8 +187,8 @@ void valider_newfile()
 
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-	
-	GdkPixbuf* res = copy_pixbuf(image_surface);
+
+	GdkPixbuf *res = copy_pixbuf(image_surface);
 	push(res);
 
 	gtk_image_set_from_pixbuf(image, image_surface);
@@ -187,52 +198,51 @@ void valider_newfile()
 	GtkWidget *tools;
 	tools = GTK_WIDGET(gtk_builder_get_object(builder, "tools"));
 	gtk_widget_show(tools);
-
 }
-	/////*SAVE*/////
+/////*SAVE*/////
 
 int asbeenload = 0;
 
 void button_saveas()
 {
-	GtkWidget* folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
+	GtkWidget *folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
 	gtk_widget_show(folder);
 }
 
 void button_save()
 {
-	if(!asbeenload){
+	if (!asbeenload)
+	{
 		button_saveas();
 	}
-	else{
+	else
+	{
 		GtkImage *image =
-			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-		GdkPixbuf* pixtosave = gtk_image_get_pixbuf(image);
-		gdk_pixbuf_save(pixtosave,fileload,"jpg",NULL);
-
+				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
+		GdkPixbuf *pixtosave = gtk_image_get_pixbuf(image);
+		gdk_pixbuf_save(pixtosave, fileload, "jpg", NULL);
 	}
 }
 
 void close_save()
 {
-	GtkWidget* folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
+	GtkWidget *folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
 	gtk_widget_hide(folder);
-
 }
 
 void valider_save()
 {
-	GtkWidget* folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
-	gchar* name = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_folder")));
+	GtkWidget *folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
+	gchar *name = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_folder")));
 	gchar *fileName = gtk_file_chooser_get_filename(folder);
 	char buffer[80];
-	printf("%s et %s\n",name,fileName);
-	sprintf(buffer,"%s/%s",fileName,name);
-	printf("%s\n",buffer);
+	printf("%s et %s\n", name, fileName);
+	sprintf(buffer, "%s/%s", fileName, name);
+	printf("%s\n", buffer);
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-	GdkPixbuf* pixtosave = gtk_image_get_pixbuf(image);
-	gdk_pixbuf_save(pixtosave,buffer,"jpg",NULL);
+	GdkPixbuf *pixtosave = gtk_image_get_pixbuf(image);
+	gdk_pixbuf_save(pixtosave, buffer, "jpg", NULL);
 	close_save();
 
 	/*free(folder);
@@ -242,8 +252,6 @@ void valider_save()
 	free(image);
 	free(pixtosave);*/
 }
-
-
 
 /////**Color Dialog**///////////
 void button_color()
@@ -323,9 +331,9 @@ void fermer_filechooser()
 void valider_filechooser()
 {
 	GtkFileChooser *filechooser;
-//	GtkButton *button1 = button;
-//	GtkEntry *status;
-//	status = GTK_ENTRY(gtk_builder_get_object(builder, "status"));
+	//	GtkButton *button1 = button;
+	//	GtkEntry *status;
+	//	status = GTK_ENTRY(gtk_builder_get_object(builder, "status"));
 	filechooser =
 			GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "filechooser"));
 	fileload = gtk_file_chooser_get_filename(filechooser);
@@ -349,7 +357,7 @@ void valider_filechooser()
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
-	GdkPixbuf* res = copy_pixbuf(image_surface);
+	GdkPixbuf *res = copy_pixbuf(image_surface);
 	push(res);
 
 	gtk_image_set_from_pixbuf(image, image_surface);
@@ -359,13 +367,9 @@ else
 		gtk_entry_set_text(status, "File must be *.jpg");
 	}*/
 
-
-
 	tools_show();
 	asbeenload = 1;
 	fermer_filechooser();
-
-
 
 	//free(filechooser);
 	//free(image);
@@ -377,17 +381,18 @@ int undo_firsttime = 1;
 
 void update_image()
 {
-	if(top >= MAXSIZE){
+	if (top >= MAXSIZE)
+	{
 		pop_head();
 		printf("9\n");
 	}
 
-printf("%i\n",top);
+	printf("%i\n", top);
 
-	GdkPixbuf* res = copy_pixbuf(image_surface);
+	GdkPixbuf *res = copy_pixbuf(image_surface);
 	push(res);
 	//free(res);
-	
+
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
@@ -446,150 +451,222 @@ void rotation_button()
 	update_image();
 }
 
-
-
-
 //////SETTINGS DRAW////////
 
-void settings_draw(){
+void settings_draw()
+{
+	selected_event = 1;
 	GtkWidget *drawwindow;
 	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_window"));
 	gtk_widget_show(drawwindow);
 
-  
- 
-  // Récupération de la fenêtre root
-  
+	// Récupération de la fenêtre root
+
 	//free(drawwindow);
 }
 
 gint x_center, y_center;
 int select = 0;
 
-void select_center(){
+void select_center()
+{
 	select = 1;
 }
 
-void point_center(){
-  GdkWindow *root = NULL;
-  
-  // Récupération de la fenêtre root
-  root = gdk_get_default_root_window ();
-if(select){
-  if (root==NULL) g_printerr ("root = NULL !!!");
- 
-  // Récupération du pointeur de la souris
-  GdkDevice *pointer = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (root)));
- 
-  // Récupération des coordonnées de la souris
-  gdk_window_get_device_position (root, pointer, &x_center, &y_center, NULL);
- 
-  // Mise à jour des GtkLabel pour afficher les coordonnées.
-  gchar *text = g_strdup_printf("%d , %d", x_center,y_center);
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, "label_coord")), text);
-  select = 0;
-  g_free(text);
-}
+void point_center()
+{
+	GdkWindow *root = NULL;
+
+	// Récupération de la fenêtre root
+	root = gdk_get_default_root_window();
+	if (select)
+	{
+		if (root == NULL)
+			g_printerr("root = NULL !!!");
+
+		// Récupération du pointeur de la souris
+		GdkDevice *pointer = gdk_device_manager_get_client_pointer(gdk_display_get_device_manager(gdk_window_get_display(root)));
+
+		// Récupération des coordonnées de la souris
+		gdk_window_get_device_position(root, pointer, &x_center, &y_center, NULL);
+
+		// Mise à jour des GtkLabel pour afficher les coordonnées.
+		gchar *text = g_strdup_printf("%d , %d", x_center, y_center);
+		gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, "label_coord")), text);
+		select = 0;
+		g_free(text);
+	}
 }
 
-void fermer_draw(){
+void fermer_draw()
+{
 	GtkWidget *drawwindow;
 	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_window"));
 	gtk_widget_hide(drawwindow);
 	//free(drawwindow);
 }
 
-void valider_draw(){
-	GtkToggleButton* fill = (gtk_builder_get_object(builder, "fill"));
+void valider_draw()
+{
+	GtkToggleButton *fill = (gtk_builder_get_object(builder, "fill"));
 	//GtkImage* image_surface2 = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 	//GdkPixbuf* image = gtk_image_get_pixbuf(image_surface2);
-	GtkEntry* radius_entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"));
+	GtkEntry *radius_entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"));
 	int radius = atoi((gtk_entry_get_text(radius_entry)));
-	struct color color = {0,0,0,0};
+	struct color color = {0, 0, 0, 0};
 	//struct box box = {x_center-radius,y_center}
 	/*if(gtk_toggle_button_is_active(rectangle)){
 		Fill_color2(image,color,box);		
 	}
 	else{*/
-	testCircleDraw(image_surface,&color,x_center,y_center,radius,gtk_toggle_button_get_active(fill));
+	testCircleDraw(image_surface, &color, x_center, y_center, radius, gtk_toggle_button_get_active(fill));
 
 	update_image();
 	fermer_draw();
 }
 
 int select_rect = 0;
-struct box box = {0,0,0,0};
+struct box box = {0, 0, 0, 0};
 
-void fermer_rect(){
+void fermer_rect()
+{
 	GtkWidget *drawwindow;
 	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
 	select_rect = 0;
 	gtk_widget_hide(drawwindow);
 }
 
-void select_rectangle(){
+void select_rectangle()
+{
+	selected_event = 1;
 	select_rect = 1;
 }
 
-void settings_rect(){
+void settings_rect()
+{
 	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
+	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "5"));
 	gtk_widget_show(drawwindow);
 }
 
-void point_rect(){
-  GdkWindow *root = NULL;
-  gint x,y;
-  root = gdk_get_default_root_window ();
-if(select_rect>0){
-	printf("%i\n",select_rect);
-  if (root==NULL) g_printerr ("root = NULL !!!");
- 	gchar* rect;
-  // Récupération du pointeur de la souris
+void point_rect()
+{
+	GdkWindow *root = NULL;
+	gint x, y;
+	root = gdk_get_default_root_window();
+	if (select_rect > 0)
+	{
+		printf("%i\n", select_rect);
+		if (root == NULL)
+			g_printerr("root = NULL !!!");
+		gchar *rect;
+		// Récupération du pointeur de la souris
 
-  GdkDevice *pointer = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (root)));
- 
-  // Récupération des coordonnées de la souris
-  gdk_window_get_device_position (root, pointer, &x, &y, NULL);
-  if(select_rect==2){
-  	printf("%i\n",2);
-  box.x2 = x;
-  box.y2 = y;
-  rect = "rect_2";
-} else {
-	printf("%i\n",1);
-	box.x1 = x;
-	box.y1= y;
-	rect = "rect_1";
-}
- 
-  // Mise à jour des GtkLabel pour afficher les coordonnées.
-  gchar *text = g_strdup_printf("%d , %d", x,y);
-  gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, rect)), text);
-  select_rect += 1;
-  g_free(text);
+		GdkDevice *pointer = gdk_device_manager_get_client_pointer(gdk_display_get_device_manager(gdk_window_get_display(root)));
+
+		// Récupération des coordonnées de la souris
+		gdk_window_get_device_position(root, pointer, &x, &y, NULL);
+		if (select_rect == 2)
+		{
+			printf("%i\n", 2);
+			box.x2 = x;
+			box.y2 = y;
+			rect = "rect_2";
+		}
+		else
+		{
+			printf("%i\n", 1);
+			box.x1 = x;
+			box.y1 = y;
+			rect = "rect_1";
+		}
+
+		// Mise à jour des GtkLabel pour afficher les coordonnées.
+		gchar *text = g_strdup_printf("%d , %d", x, y);
+		gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(builder, rect)), text);
+		select_rect += 1;
+		g_free(text);
 	}
 }
 
-void valider_rect(){
-	struct color col = {0,0,0,0};
-	Fill_color2(image_surface,&col,&box);
+void valider_rect()
+{
+	struct color col = {0, 0, 0, 0};
+	Fill_color2(image_surface, &col, &box);
 	fermer_rect();
 	update_image();
 }
 
 void undo_button()
 {
-	if(top > -1){
-		if(undo_firsttime){
-				pop();}
-		GdkPixbuf* res = pop();
+	if (top > -1)
+	{
+		if (undo_firsttime)
+		{
+			pop();
+		}
+		GdkPixbuf *res = pop();
 		GtkImage *image =
 				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
 		gtk_image_set_from_pixbuf(image, res);
 		undo_firsttime = 0;
-	}	
+	}
+}
+
+void pencil_button()
+{
+	selected_event = 2;
+	GtkWidget *drawwindow;
+	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_pencil"));
+	gtk_widget_show(drawwindow);
+	return;
+}
+
+struct color pencil_color = {0, 0, 0, 0};
+int pencil_radius = 5;
+void validate_pencil_radius()
+{
+	pencil_radius = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "pencil_radius"))));
+}
+
+void close_pencil_radius()
+{
+	GtkWidget *drawwindow;
+	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_pencil"));
+	gtk_widget_hide(drawwindow);
+}
+void draw_pencil(int x, int y, int r)
+{
+	Fill_circle(image_surface, &pencil_color, x, y, pencil_radius);
+	update_image();
+}
+
+void button_press_event(GtkWidget *widget, GdkEventButton *event)
+{
+	if (selected_event < 0 || image_surface == NULL)
+		return;
+	int x, y;
+	x = event->x;
+	y = event->y;
+
+	if (selected_event == 1)
+		return point_rect();
+	if (selected_event == 2)
+		return draw_pencil(x, y, 10);
+}
+
+void motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
+{
+	if (selected_event < 0 || image_surface == NULL)
+		return;
+	int x, y;
+	x = event->x;
+	y = event->y;
+	if (selected_event < 0)
+		return;
+	if (selected_event == 2)
+		return draw_pencil(x, y, 10);
 }
 
 int main(int argc,
@@ -603,11 +680,14 @@ int main(int argc,
 	//Interface/////////////////////////////////////////////
 
 	GtkWidget *window;
+	GtkWidget *eventbox;
+
 	GError *error = NULL;
 	/* Init GTK+ */
 	gtk_init(&argc, &argv);
 	/* Create new GtkBuilder object */
 	builder = gtk_builder_new();
+
 	/* Load UI from file. If error occurs, report it and quit application.
      * Replace "tut.glade" with your saved project. */
 	if (!gtk_builder_add_from_file(builder, "interface1.glade", &error))
@@ -618,7 +698,9 @@ int main(int argc,
 	}
 	/* Get main window pointer from UI */
 	window = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+	eventbox = GTK_WIDGET(gtk_builder_get_object(builder, "eventbox"));
 
+	gtk_widget_set_events(eventbox, GDK_EXPOSURE_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	gtk_builder_connect_signals(builder, NULL);
 	/* Destroy builder, since we don't need it anymore */
 	//g_object_unref( G_OBJECT( builder ) );
@@ -628,9 +710,7 @@ int main(int argc,
 	/* Start main loop */
 	gtk_main();
 
-
 	//free(image_surface);
-	
 
 	return (0);
 }
