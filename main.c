@@ -15,90 +15,11 @@
 #include "process/image_reverse.h"
 #include "process/image_rotate.h"
 #include "process/image_split.h"
-//#include "process/image_selection.h"
 #include "process/image_fusion.h"
 #include "tests.h"
 #include "filters/contrast.h"
 
-///////**STACK FUNCTION**/////////////////////////
-int MAXSIZE = 15;
-GdkPixbuf *stack[];
-int top = -1;
-int selected_event = -1;
-
-int isempty()
-{
-
-	if (top == -1)
-		return 1;
-	else
-		return 0;
-}
-
-int isfull()
-{
-
-	if (top == MAXSIZE)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int peek()
-{
-	return stack[top];
-}
-
-GdkPixbuf *pop()
-{
-	GdkPixbuf *data;
-
-	if (!isempty())
-	{
-		data = stack[top];
-		top = top - 1;
-		return data;
-	}
-	else
-	{
-		printf("Could not retrieve data, Stack is empty.\n");
-	}
-}
-
-int push(GdkPixbuf *data)
-{
-
-	if (!isfull())
-	{
-		top = top + 1;
-		stack[top] = data;
-	}
-	else
-	{
-		printf("Could not insert data, Stack is full.\n");
-	}
-}
-
-int pop_head()
-{
-	if (isempty())
-		printf("Cannot pop head because stack is empty.\n");
-	else
-	{
-		GdkPixbuf *tmp;
-		for (int i = top; i > 1; i--)
-		{
-			tmp = stack[i - 1];
-			stack[i - 1] = stack[i];
-		}
-		top--;
-	}
-}
-/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 
 GtkBuilder *builder;
 GtkEntry *file;
@@ -111,15 +32,19 @@ int height = 0;
 
 int ratio = 100;
 
-gchar *fileload;
+GdkPixbuf *unredo[15];
+int index = 0;
+int max = 0;
+
+int selected_event = -1;
+
+char filesave[80];
 
 void buttonload_clicked()
 {
 
 	GtkWidget *popup;
 	popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
-
-	//root = gdk_get_default_root_window ();
 
 	gtk_widget_show(popup);
 }
@@ -129,14 +54,9 @@ GdkPixbuf *copy_pixbuf(GdkPixbuf *image)
 	width = gdk_pixbuf_get_width(image);
 	height = gdk_pixbuf_get_height(image);
 	GdkPixbuf *copy = gdk_pixbuf_copy(image);
-	//GdkPixbuf* copy = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 0, 8, width, height);
-	/*for(int i = 0; i < width; i++){
-		for(int j = 0; j < height; j++){
-			put
-		}
-	}*/
 	return copy;
 }
+
 ////////////////////**FILE**//////////////////////////
 //////**NEW FILE**///////
 void button_new()
@@ -188,8 +108,11 @@ void valider_newfile()
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
-	GdkPixbuf *res = copy_pixbuf(image_surface);
-	push(res);
+	GdkPixbuf* res = copy_pixbuf(image_surface);	
+	index = 0;
+	max = 0;
+	unredo[index] = res;
+	
 
 	gtk_image_set_from_pixbuf(image, image_surface);
 
@@ -201,7 +124,7 @@ void valider_newfile()
 }
 /////*SAVE*/////
 
-int asbeenload = 0;
+int asbeensaved = 0;
 
 void button_saveas()
 {
@@ -211,7 +134,7 @@ void button_saveas()
 
 void button_save()
 {
-	if (!asbeenload)
+	if (!asbeensaved)
 	{
 		button_saveas();
 	}
@@ -220,7 +143,8 @@ void button_save()
 		GtkImage *image =
 				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 		GdkPixbuf *pixtosave = gtk_image_get_pixbuf(image);
-		gdk_pixbuf_save(pixtosave, fileload, "jpg", NULL);
+		printf("Your image has been saved !\n");
+		gdk_pixbuf_save(pixtosave, filesave, "png", NULL);
 	}
 }
 
@@ -232,25 +156,17 @@ void close_save()
 
 void valider_save()
 {
-	GtkWidget *folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
-	gchar *name = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_folder")));
+	GtkWidget* folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
+	gchar* name = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_folder")));
 	gchar *fileName = gtk_file_chooser_get_filename(folder);
-	char buffer[80];
-	printf("%s et %s\n", name, fileName);
-	sprintf(buffer, "%s/%s", fileName, name);
-	printf("%s\n", buffer);
+	sprintf(filesave,"%s/%s",fileName,name);
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-	GdkPixbuf *pixtosave = gtk_image_get_pixbuf(image);
-	gdk_pixbuf_save(pixtosave, buffer, "jpg", NULL);
+	GdkPixbuf* pixtosave = gtk_image_get_pixbuf(image);
+	printf("Your image has been saved !\n");
+	gdk_pixbuf_save(pixtosave,filesave,"png",NULL);
+	asbeensaved = 1;
 	close_save();
-
-	/*free(folder);
-	free(name);
-	free(fileName);
-	free(buffer);
-	free(image);
-	free(pixtosave);*/
 }
 
 /////**Color Dialog**///////////
@@ -334,12 +250,9 @@ void fermer_filechooser()
 void valider_filechooser()
 {
 	GtkFileChooser *filechooser;
-	//	GtkButton *button1 = button;
-	//	GtkEntry *status;
-	//	status = GTK_ENTRY(gtk_builder_get_object(builder, "status"));
 	filechooser =
 			GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "filechooser"));
-	fileload = gtk_file_chooser_get_filename(filechooser);
+	gchar* fileload = gtk_file_chooser_get_filename(filechooser);
 
 	fermer_filechooser();
 	image_surface = gdk_pixbuf_new_from_file(fileload, NULL);
@@ -360,49 +273,28 @@ void valider_filechooser()
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
-	GdkPixbuf *res = copy_pixbuf(image_surface);
-	push(res);
+	GdkPixbuf* res = copy_pixbuf(image_surface);
+	index = 0;
+	max = 0;
+	unredo[index] = res;
 
 	gtk_image_set_from_pixbuf(image, image_surface);
-	/*	}
-else
-	{
-		gtk_entry_set_text(status, "File must be *.jpg");
-	}*/
 
 	tools_show();
-	asbeenload = 1;
 	fermer_filechooser();
-
-	//free(filechooser);
-	//free(image);
-	//free(res);
 }
 
 ///////////*Tools*/////////////////
-int undo_firsttime = 1;
 
 void update_image()
 {
-	if (top >= MAXSIZE)
-	{
-		pop_head();
-		//printf("9\n");
-	}
-
-	//printf("%i\n", top);
-
-	GdkPixbuf *res = copy_pixbuf(image_surface);
-	push(res);
-	//free(res);
-
+	GdkPixbuf* res = copy_pixbuf(image_surface);
+	index++;
+	unredo[index] = res;
+	max = index;
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-
 	gtk_image_set_from_pixbuf(image, image_surface);
-	undo_firsttime = 1;
-
-	//free(image);
 }
 
 void greyscale_button()
@@ -524,7 +416,6 @@ void draw_rect(int x, int y)
 
 void draw_rect2(int x, int y)
 {
-	
 	if (x < draw_rect_box.x1)
 	{
 		draw_rect_box.x2 = draw_rect_box.x1;
@@ -552,18 +443,24 @@ void draw_rect2(int x, int y)
 
 void undo_button()
 {
-	if (top > -1)
-	{
-		if (undo_firsttime)
-		{
-			pop();
-		}
-		GdkPixbuf *res = pop();
+	
+	if(index > 0){
 		GtkImage *image =
 				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
+		index -= 1;
+		image_surface = copy_pixbuf(unredo[index]);
+		gtk_image_set_from_pixbuf(image, image_surface);
+	}
+}
 
-		gtk_image_set_from_pixbuf(image, res);
-		undo_firsttime = 0;
+void redo_button(){
+	
+	if(index<max && max < 15){
+		GtkImage *image =
+				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
+		index += 1;
+		image_surface = copy_pixbuf(unredo[index]);
+		gtk_image_set_from_pixbuf(image, image_surface);
 	}
 }
 
@@ -591,7 +488,9 @@ void settings_pencil()
 void draw_pencil(int x, int y, int r)
 {
 	Fill_circle(image_surface, &pencil_color, x, y, pencil_radius);
-	update_image();
+
+	GtkImage *image = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
+	gtk_image_set_from_pixbuf(image, image_surface);
 }
 
 void button_press_event(GtkWidget *widget, GdkEventButton *event)
@@ -620,6 +519,8 @@ void button_release_event(GtkWidget *widget, GdkEventButton *event)
 
 	if (selected_event == 3)
 		return draw_rect2(x, y);
+	if (selected_event == 2)
+		update_image();
 }
 
 void motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
