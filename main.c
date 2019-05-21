@@ -64,8 +64,10 @@ void GdkSetCursor(char *name)
 void buttonload_clicked()
 {
 	GdkSetCursor("default");
-	GtkWidget *popup;
-	popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
+	GtkWidget *popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
+	GtkWidget *window1 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+
+	gtk_window_set_transient_for(popup, window1);
 
 	gtk_widget_show(popup);
 }
@@ -274,7 +276,6 @@ void valider_filechooser()
 	filechooser =
 			GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "filechooser"));
 	gchar *fileload = gtk_file_chooser_get_filename(filechooser);
-
 	fermer_filechooser();
 	image_surface = gdk_pixbuf_new_from_file(fileload, NULL);
 	width = gdk_pixbuf_get_width(image_surface);
