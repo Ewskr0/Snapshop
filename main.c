@@ -108,11 +108,10 @@ void valider_newfile()
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
-	GdkPixbuf* res = copy_pixbuf(image_surface);	
+	GdkPixbuf *res = copy_pixbuf(image_surface);
 	index = 0;
 	max = 0;
 	unredo[index] = res;
-	
 
 	gtk_image_set_from_pixbuf(image, image_surface);
 
@@ -156,15 +155,15 @@ void close_save()
 
 void valider_save()
 {
-	GtkWidget* folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
-	gchar* name = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_folder")));
+	GtkWidget *folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
+	gchar *name = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_folder")));
 	gchar *fileName = gtk_file_chooser_get_filename(folder);
-	sprintf(filesave,"%s/%s",fileName,name);
+	sprintf(filesave, "%s/%s", fileName, name);
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-	GdkPixbuf* pixtosave = gtk_image_get_pixbuf(image);
+	GdkPixbuf *pixtosave = gtk_image_get_pixbuf(image);
 	printf("Your image has been saved !\n");
-	gdk_pixbuf_save(pixtosave,filesave,"png",NULL);
+	gdk_pixbuf_save(pixtosave, filesave, "png", NULL);
 	asbeensaved = 1;
 	close_save();
 }
@@ -172,7 +171,7 @@ void valider_save()
 /////**Color Dialog**///////////
 void button_color()
 {
-	GtkWidget *color;	
+	GtkWidget *color;
 	color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
 	gtk_widget_show(color);
 }
@@ -203,7 +202,7 @@ void valider_color()
 	gtk_color_button_set_color(color_button, color_transform);
 	color_button = GTK_COLOR_BUTTON(gtk_builder_get_object(builder, "button_color2"));
 	gtk_color_button_set_color(color_button, color_transform);
-	
+
 	fermer_color();
 }
 //////////////////////////////
@@ -252,7 +251,7 @@ void valider_filechooser()
 	GtkFileChooser *filechooser;
 	filechooser =
 			GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "filechooser"));
-	gchar* fileload = gtk_file_chooser_get_filename(filechooser);
+	gchar *fileload = gtk_file_chooser_get_filename(filechooser);
 
 	fermer_filechooser();
 	image_surface = gdk_pixbuf_new_from_file(fileload, NULL);
@@ -273,7 +272,7 @@ void valider_filechooser()
 	GtkImage *image =
 			GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 
-	GdkPixbuf* res = copy_pixbuf(image_surface);
+	GdkPixbuf *res = copy_pixbuf(image_surface);
 	index = 0;
 	max = 0;
 	unredo[index] = res;
@@ -288,7 +287,7 @@ void valider_filechooser()
 
 void update_image()
 {
-	GdkPixbuf* res = copy_pixbuf(image_surface);
+	GdkPixbuf *res = copy_pixbuf(image_surface);
 	index++;
 	unredo[index] = res;
 	max = index;
@@ -341,7 +340,30 @@ void reverse_hor_button()
 void rotation_button()
 {
 	image_surface = Rotate(image_surface, 1);
-	
+
+	update_image();
+}
+
+void histogram_hide_window()
+{
+	GtkWidget *histo_window = GTK_WIDGET(gtk_builder_get_object(builder, "histogram_window"));
+	gtk_widget_hide(histo_window);
+}
+
+void histogram_button_1()
+{
+	GdkPixbuf *img_histo = Create_histo_graph(image_surface);
+	GtkWidget *histo_window = GTK_WIDGET(gtk_builder_get_object(builder, "histogram_window"));
+	GtkImage *image =
+			GTK_IMAGE(gtk_builder_get_object(builder, "image_histogram"));
+	if (img_histo)
+		gtk_image_set_from_pixbuf(image, img_histo);
+	gtk_widget_show(histo_window);
+}
+histogram_button_2()
+{
+
+	HistogramEqualisation(image_surface);
 	update_image();
 }
 
@@ -366,12 +388,12 @@ void settings_circle()
 
 	struct color newColor = {((int)(color_choosed.red * 255)), ((int)(color_choosed.green * 255)), ((int)(color_choosed.blue * 255)), 255};
 	circle_color = newColor;
-	
+
 	radius_circle = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"))));
-	
+
 	GtkToggleButton *fill = (gtk_builder_get_object(builder, "circleFillCheck"));
 	fill_circle = gtk_toggle_button_get_active(fill);
-	
+
 	// Récupération de la fenêtre root
 
 	//free(drawwindow);
@@ -389,7 +411,8 @@ struct box draw_rect_box = {0, 0, 0, 0};
 struct color rect_color = {0, 2550, 0, 100};
 int fill_rect = 0;
 
-void button_rect(){
+void button_rect()
+{
 	selected_event = 3;
 }
 
@@ -400,7 +423,7 @@ void settings_rect()
 	GdkRGBA color_choosed;
 
 	gtk_color_chooser_get_rgba(color_chooser, &color_choosed);
-	
+
 	GtkToggleButton *fill = (gtk_builder_get_object(builder, "rectFillCheck"));
 	fill_rect = gtk_toggle_button_get_active(fill);
 
@@ -434,7 +457,7 @@ void draw_rect2(int x, int y)
 	{
 		draw_rect_box.y2 = y;
 	}
-	if(fill_rect)
+	if (fill_rect)
 		Fill_color2(image_surface, &rect_color, &draw_rect_box);
 	else
 		Draw_rect(image_surface, &rect_color, &draw_rect_box);
@@ -443,8 +466,9 @@ void draw_rect2(int x, int y)
 
 void undo_button()
 {
-	
-	if(index > 0){
+
+	if (index > 0)
+	{
 		GtkImage *image =
 				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 		index -= 1;
@@ -453,9 +477,11 @@ void undo_button()
 	}
 }
 
-void redo_button(){
-	
-	if(index<max && max < 15){
+void redo_button()
+{
+
+	if (index < max && max < 15)
+	{
 		GtkImage *image =
 				GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 		index += 1;
