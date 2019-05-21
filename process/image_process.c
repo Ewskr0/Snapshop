@@ -92,7 +92,7 @@ void Draw_rect(GdkPixbuf *image, struct color *color, struct box *box)
 	    p[2] = color->blue;
    }
    int x=x1;
-   for (int j = y1; y <= y2; ++j) {
+   for (int j = y1; j <= y2; ++j) {
 	    guchar* p = Get_pixel_out(image, x, j);
 	    p[0] = color->red;
 	    p[1] = color->green;
