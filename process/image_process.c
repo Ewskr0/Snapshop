@@ -109,10 +109,14 @@ void Draw_rect(GdkPixbuf *image, struct color *color, struct box *box)
 
 void Color_pixel(guchar* p, struct color *color)
 {
-    *(p)   = ((guchar)100 - color->opacity) +
+    /* *(p)   = ((guchar)100 - color->opacity) +
 	(color->opacity * color->red)/(guchar)100;
     *(p + 1) = ((guchar)100 - color->opacity) +
 	(color->opacity * color->green)/(guchar)100;
     *(p + 2) = ((guchar)100 - color->opacity) +
 	(color->opacity * color->blue)/(guchar)100;
+	*/
+	p[0] = color->red;
+	p[1] = color->green;
+	p[2] = color->blue;
 }

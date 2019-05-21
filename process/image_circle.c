@@ -19,7 +19,7 @@ void testCircleDraw
         // check for decision parameter 
         // and correspondingly  
         // update d, x, y 
-        if (d > 0) 
+        if (d >= 0) 
         { 
             y--;  
             d = d + 4 * (x - y) + 10; 
