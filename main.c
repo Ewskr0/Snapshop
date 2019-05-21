@@ -32,7 +32,7 @@ int height = 0;
 
 int ratio = 100;
 
-GdkPixbuf *unredo[15];
+GdkPixbuf *unredo[50];
 int index = 0;
 int max = 0;
 
@@ -40,9 +40,32 @@ int selected_event = -1;
 
 char filesave[80];
 
+
+
+
+void GdkSetCursor(char* name)
+{
+	
+	GdkScreen* screen = gdk_screen_get_default();
+	GdkWindow* win = gdk_screen_get_root_window(screen);
+
+	GdkDisplay* display = gdk_display_get_default();
+	GdkCursor* cursor = malloc(sizeof(GdkCursor*));
+	if(name == "pencil")
+	{
+		cursor = gdk_cursor_new(GDK_PENCIL);
+	}
+	else
+	{
+		cursor = gdk_cursor_new_from_name (display, name);
+	}
+	gdk_window_set_cursor(win, cursor);
+	while (gtk_events_pending()) gtk_main_iteration();
+}
+
 void buttonload_clicked()
 {
-
+	GdkSetCursor("default");
 	GtkWidget *popup;
 	popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
 
@@ -172,7 +195,8 @@ void valider_save()
 /////**Color Dialog**///////////
 void button_color()
 {
-	GtkWidget *color;	
+	GtkWidget *color;
+	GdkSetCursor("default");
 	color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
 	gtk_widget_show(color);
 }
@@ -300,18 +324,21 @@ void update_image()
 void greyscale_button()
 {
 	GrayScale(image_surface);
+	GdkSetCursor("default");
 	update_image();
 }
 
 void negative_button()
 {
 	Negative(image_surface);
+	GdkSetCursor("default");
 	update_image();
 }
 
 void brigthness_button()
 {
 	Brightness(image_surface, 100);
+	GdkSetCursor("default");
 	update_image();
 }
 
@@ -324,24 +351,27 @@ void encrypt_button()
 void uncrypt_button()
 {
 	Uncrypt(image_surface, image_code);
+	GdkSetCursor("default");
 	update_image();
 }
 
 void reverse_vert_button()
 {
 	ReverseVert(image_surface);
+	GdkSetCursor("default");
 	update_image();
 }
 
 void reverse_hor_button()
 {
 	ReverseHor(image_surface);
+	GdkSetCursor("default");
 	update_image();
 }
 void rotation_button()
 {
 	image_surface = Rotate(image_surface, 1);
-	
+	GdkSetCursor("default");
 	update_image();
 }
 
@@ -354,10 +384,12 @@ struct color circle_color = {255, 120, 0, 100};
 void button_circle()
 {
 	selected_event = 1;
+	GdkSetCursor("default");
 }
 
 void settings_circle()
 {
+	
 	GtkColorChooser *color_chooser;
 	color_chooser = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "color"));
 	GdkRGBA color_choosed;
@@ -391,6 +423,7 @@ int fill_rect = 0;
 
 void button_rect(){
 	selected_event = 3;
+	GdkSetCursor("crosshair");
 }
 
 void settings_rect()
@@ -467,6 +500,7 @@ void redo_button(){
 void pencil_button()
 {
 	selected_event = 2;
+	GdkSetCursor("pencil");
 	return;
 }
 
@@ -474,6 +508,7 @@ struct color pencil_color = {30, 255, 255, 100};
 int pencil_radius = 5;
 void settings_pencil()
 {
+	
 	GtkColorChooser *color_chooser;
 	color_chooser = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "color"));
 	GdkRGBA color_choosed;
