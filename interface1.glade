@@ -439,10 +439,15 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="margin_top">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkButton">
                 <property name="label">gtk-undo</property>
@@ -485,11 +490,13 @@
         </child>
         <child>
           <object class="GtkButton">
-            <property name="label" translatable="yes">Grayscale</property>
+            <property name="label" translatable="yes">Rotation</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="greyscale_button" swapped="no"/>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <signal name="clicked" handler="rotation_button" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -498,12 +505,40 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">Brigthness</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="brigthness_button" swapped="no"/>
+            <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Reverse Vert</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="reverse_vert_button" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Reverse Hor  </property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="reverse_hor_button" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -512,15 +547,43 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">Negative</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="negative_button" swapped="no"/>
+            <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkButton" id="histogram_button_1">
+                <property name="label" translatable="yes">Generate Histogram</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="histogram_button_1" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="histogram_button_2">
+                <property name="label" translatable="yes">Equalize  (Histogram)</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="histogram_button_2" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
@@ -529,6 +592,9 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">Encrypt</property>
@@ -565,87 +631,73 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Reverse Vert</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="reverse_vert_button" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Reverse Hor  </property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="reverse_hor_button" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="margin_top">7</property>
+            <property name="margin_bottom">7</property>
+            <property name="label" translatable="yes">Filters</property>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">5</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkButton">
+            <property name="label" translatable="yes">Brigthness</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkButton" id="histogram_button_1">
-                <property name="label" translatable="yes">Generate Histogram</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="histogram_button_1" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="histogram_button_2">
-                <property name="label" translatable="yes">Equalize  (Histogram)</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="histogram_button_2" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <signal name="clicked" handler="brigthness_button" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">Negative</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <signal name="clicked" handler="negative_button" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">Grayscale</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <signal name="clicked" handler="greyscale_button" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">8</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
             <child>
               <object class="GtkButton" id="blur_button_1">
                 <property name="label" translatable="yes">Convolution</property>
@@ -668,7 +720,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes">Size</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -680,11 +732,12 @@
                   <object class="GtkEntry" id="blur_size_convo">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="width_chars">1</property>
                     <property name="text" translatable="yes">5</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -692,7 +745,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes">Value</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -704,11 +757,12 @@
                   <object class="GtkEntry" id="blur_val_convo">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="width_chars">1</property>
                     <property name="text" translatable="yes">3</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -723,16 +777,19 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">7</property>
+            <property name="position">9</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkButton" id="blur_button_2">
-                <property name="label" translatable="yes">Motion blur</property>
+                <property name="label" translatable="yes">Motion Blur</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -745,10 +802,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="blur_size_motion">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">40</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">12</property>
+                <property name="margin_right">8</property>
+                <property name="label" translatable="yes">Size</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -756,42 +815,17 @@
                 <property name="position">1</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">Rotation</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="rotation_button" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">9</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">49</property>
-            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkSeparator">
+              <object class="GtkEntry" id="blur_size_motion">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="width_chars">4</property>
+                <property name="text" translatable="yes">40</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -805,6 +839,35 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">7</property>
+                <property name="margin_bottom">7</property>
+                <property name="label" translatable="yes">Drawing</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">11</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">Pencil</property>
@@ -838,6 +901,7 @@
                 <property name="name">&amp;</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="width_chars">4</property>
                 <property name="text" translatable="yes">10</property>
                 <property name="input_purpose">digits</property>
                 <signal name="changed" handler="settings_update" swapped="no"/>
@@ -852,13 +916,16 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">11</property>
+            <property name="position">12</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkCheckButton" id="circleFillCheck">
                 <property name="visible">True</property>
@@ -880,6 +947,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_right">4</property>
                 <signal name="clicked" handler="button_circle" swapped="no"/>
               </object>
               <packing>
@@ -889,12 +957,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="entry_radius">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">10</property>
-                <signal name="activate" handler="settings_circle" swapped="no"/>
-                <signal name="changed" handler="settings_update" swapped="no"/>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">   Radius   </property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -902,17 +968,35 @@
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkEntry" id="entry_radius">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="width_chars">4</property>
+                <property name="text" translatable="yes">10</property>
+                <signal name="activate" handler="settings_circle" swapped="no"/>
+                <signal name="changed" handler="settings_update" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">12</property>
+            <property name="position">13</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkCheckButton" id="rectFillCheck">
                 <property name="visible">True</property>
@@ -946,14 +1030,17 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">13</property>
+            <property name="position">14</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">4</property>
+            <property name="margin_left">3</property>
+            <property name="margin_right">3</property>
+            <property name="margin_bottom">3</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkColorButton" id="button_color2">
                 <property name="visible">True</property>
@@ -989,7 +1076,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">14</property>
+            <property name="position">15</property>
           </packing>
         </child>
       </object>
