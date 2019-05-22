@@ -256,7 +256,7 @@ void valider_save()
 /////**Color Dialog**///////////
 void button_color()
 {
-	GtkWidget *color;
+	GtkWidget *color;	
 	color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
 	gtk_widget_show(color);
 }
@@ -265,6 +265,7 @@ void fermer_color()
 {
 	GtkWidget *color;
 	color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
+	settings_update();
 	gtk_widget_hide(color);
 }
 
@@ -284,7 +285,9 @@ void valider_color()
 
 	color_button = GTK_COLOR_BUTTON(gtk_builder_get_object(builder, "button_color"));
 	gtk_color_button_set_color(color_button, color_transform);
-
+	color_button = GTK_COLOR_BUTTON(gtk_builder_get_object(builder, "button_color2"));
+	gtk_color_button_set_color(color_button, color_transform);
+	
 	fermer_color();
 }
 //////////////////////////////
@@ -451,62 +454,64 @@ void rotation_button()
 	update_image();
 }
 
-//////SETTINGS DRAW////////
+//////  SETTINGS  CIRCLE   ////////
 
-void settings_draw()
+int radius_circle = 10;
+int fill_circle = 0;
+struct color circle_color = {255, 120, 0, 100};
+
+void button_circle()
 {
 	selected_event = 1;
-	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_window"));
-	gtk_widget_show(drawwindow);
+}
 
+void settings_circle()
+{
+	GtkColorChooser *color_chooser;
+	color_chooser = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "color"));
+	GdkRGBA color_choosed;
+
+	gtk_color_chooser_get_rgba(color_chooser, &color_choosed);
+
+	struct color newColor = {((int)(color_choosed.red * 255)), ((int)(color_choosed.green * 255)), ((int)(color_choosed.blue * 255)), 255};
+	circle_color = newColor;
+	
+	radius_circle = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"))));
+	
+	GtkToggleButton *fill = (gtk_builder_get_object(builder, "circleFillCheck"));
+	fill_circle = gtk_toggle_button_get_active(fill);
+	
 	// Récupération de la fenêtre root
 
 	//free(drawwindow);
 }
 
-int radius_circle = 10;
-int fill_circle = 0;
-struct color circle_color = {255, 120, 0, 100};
 void draw_circle(int x, int y)
 {
 	testCircleDraw(image_surface, &circle_color, x, y, radius_circle, fill_circle);
 	update_image();
 }
 
-void fermer_draw()
-{
-	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_window"));
-	gtk_widget_hide(drawwindow);
-	//free(drawwindow);
-}
-
-void valider_draw()
-{
-	GtkToggleButton *fill = (gtk_builder_get_object(builder, "fill"));
-	fill_circle = gtk_toggle_button_get_active(fill);
-	GtkEntry *radius_entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"));
-	radius_circle = atoi((gtk_entry_get_text(radius_entry)));
-}
+//////////RECTANGLE////////
 
 struct box draw_rect_box = {0, 0, 0, 0};
 struct color rect_color = {0, 2550, 0, 100};
 int fill_rect = 0;
 
-void fermer_rect()
-{
-	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
-	gtk_widget_hide(drawwindow);
+void button_rect(){
+	selected_event = 3;
 }
 
 void settings_rect()
 {
-	selected_event = 3;
-	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_rect"));
-	gtk_widget_show(drawwindow);
+	GtkColorChooser *color_chooser;
+	color_chooser = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "color"));
+	GdkRGBA color_choosed;
+
+	gtk_color_chooser_get_rgba(color_chooser, &color_choosed);
+
+	struct color newColor = {((int)(color_choosed.red * 255)), ((int)(color_choosed.green * 255)), ((int)(color_choosed.blue * 255)), 255};
+	rect_color = newColor;
 }
 
 void draw_rect(int x, int y)
@@ -517,6 +522,7 @@ void draw_rect(int x, int y)
 
 void draw_rect2(int x, int y)
 {
+	
 	if (x < draw_rect_box.x1)
 	{
 		draw_rect_box.x2 = draw_rect_box.x1;
@@ -542,7 +548,7 @@ void draw_rect2(int x, int y)
 
 void valider_rect()
 {
-	GtkToggleButton *fill = (gtk_builder_get_object(builder, "fill"));
+	GtkToggleButton *fill = (gtk_builder_get_object(builder, "rectFillCheck"));
 	fill_rect = gtk_toggle_button_get_active(fill);
 }
 
@@ -566,25 +572,24 @@ void undo_button()
 void pencil_button()
 {
 	selected_event = 2;
-	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_pencil"));
-	gtk_widget_show(drawwindow);
 	return;
 }
 
 struct color pencil_color = {30, 255, 255, 100};
 int pencil_radius = 5;
-void validate_pencil_radius()
+void settings_pencil()
 {
-	pencil_radius = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "pencil_radius"))));
+	GtkColorChooser *color_chooser;
+	color_chooser = GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "color"));
+	GdkRGBA color_choosed;
+
+	gtk_color_chooser_get_rgba(color_chooser, &color_choosed);
+
+	struct color newColor = {((int)(color_choosed.red * 255)), ((int)(color_choosed.green * 255)), ((int)(color_choosed.blue * 255)), 255};
+	pencil_color = newColor;
+	pencil_radius = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "radius"))));
 }
 
-void close_pencil_radius()
-{
-	GtkWidget *drawwindow;
-	drawwindow = GTK_WIDGET(gtk_builder_get_object(builder, "draw_pencil"));
-	gtk_widget_hide(drawwindow);
-}
 void draw_pencil(int x, int y, int r)
 {
 	Fill_circle(image_surface, &pencil_color, x, y, pencil_radius);
@@ -632,7 +637,12 @@ void motion_notify_event(GtkWidget *widget, GdkEventMotion *event)
 	if (selected_event == 2)
 		return draw_pencil(x, y, 10);
 }
-
+void settings_update()
+{
+	settings_circle();
+	settings_pencil();
+	settings_rect();
+}
 int main(int argc,
 				 char **argv)
 {
