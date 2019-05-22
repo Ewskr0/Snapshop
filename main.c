@@ -66,7 +66,9 @@ void buttonload_clicked()
 	GdkSetCursor("default");
 	GtkWidget *popup;
 	popup = GTK_WIDGET(gtk_builder_get_object(builder, "filechooser"));
-
+	GtkWidget *window1;
+	window1 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+	gtk_window_set_transient_for(popup, window1);
 	gtk_widget_show(popup);
 }
 
