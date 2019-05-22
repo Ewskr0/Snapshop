@@ -183,11 +183,11 @@ int test_grayscale(char *path)
 
 int test_fusion(char *path)
 {
-  printf(" ==== Testing fusion method ====\n");
-  GdkPixbuf *image = Load_image(path);
-  Fusion(image, 125);
-  Save_pixbuf("dst/filtre/img_fusion.png", "png", image);
-  printf("- Alpha applied to the image\n\n");
+    printf(" ==== Testing fusion method ====\n");
+    GdkPixbuf *image = Load_image(path);
+    Fusion(image, 255);
+    Save_pixbuf("dst/filtre/img_fusion.png", "png", image);
+    printf("- Alpha applied to the image\n\n");
 
   return 0;
 }
