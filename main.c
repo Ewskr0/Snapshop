@@ -381,6 +381,7 @@ struct color circle_color = {255, 120, 0, 100};
 void button_circle()
 {
 	selected_event = 1;
+	settings_circle();
 }
 
 void settings_circle()
@@ -437,6 +438,7 @@ void button_rect()
 {
 	selected_event = 3;
 	GdkSetCursor("crosshair");
+	settings_rect();
 }
 
 void settings_rect()
@@ -519,7 +521,7 @@ void pencil_button()
 {
 	selected_event = 2;
 	GdkSetCursor("pencil");
-	return;
+	settings_pencil();
 }
 
 struct color pencil_color = {30, 255, 255, 100};
