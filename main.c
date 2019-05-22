@@ -32,7 +32,7 @@ int height = 0;
 
 int ratio = 100;
 
-GdkPixbuf *unredo[50];
+GdkPixbuf *unredo[150];
 int index = 0;
 int max = 0;
 
@@ -150,12 +150,14 @@ int asbeensaved = 0;
 
 void button_saveas()
 {
+	GdkSetCursor("default");
 	GtkWidget *folder = GTK_WIDGET(gtk_builder_get_object(builder, "folderchooser"));
 	gtk_widget_show(folder);
 }
 
 void button_save()
 {
+	GdkSetCursor("default");
 	if (!asbeensaved)
 	{
 		button_saveas();
@@ -194,6 +196,7 @@ void valider_save()
 /////**Color Dialog**///////////
 void button_color()
 {
+	GdkSetCursor("default");
 	GtkWidget *color;
 	GdkSetCursor("default");
 	color = GTK_WIDGET(gtk_builder_get_object(builder, "color"));
@@ -343,6 +346,7 @@ void brigthness_button()
 
 void encrypt_button()
 {
+	GdkSetCursor("default");
 	image_code = Crypto(image_surface);
 	update_image();
 }
@@ -375,6 +379,7 @@ void rotation_button()
 
 void blur_button_1()
 {
+	GdkSetCursor("default");
 	int size = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "blur_size_convo"))));
 	int val = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "blur_val_convo"))));
 
@@ -385,6 +390,7 @@ void blur_button_1()
 }
 void blur_button_2()
 {
+	GdkSetCursor("default");
 	int size = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "blur_size_motion"))));
 	GdkPixbuf *new_image = Motion_blur_hor(image_surface, size);
 	image_surface = new_image;
@@ -399,6 +405,7 @@ struct color circle_color = {255, 120, 0, 100};
 
 void button_circle()
 {
+	GdkSetCursor("default");
 	selected_event = 1;
 	settings_circle();
 }
