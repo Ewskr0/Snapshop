@@ -15,14 +15,12 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <signal name="button-press-event" handler="valider_color" swapped="no"/>
         <signal name="button-release-event" handler="valider_color" swapped="no"/>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
             <property name="opacity">0</property>
             <property name="layout_style">end</property>
-<<<<<<< HEAD
             <child>
               <object class="GtkButton">
                 <property name="label">gtk-ok</property>
@@ -55,8 +53,6 @@
                 <property name="position">1</property>
               </packing>
             </child>
-=======
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
           </object>
           <packing>
             <property name="expand">False</property>
@@ -723,7 +719,6 @@
                 <property name="can_focus">True</property>
                 <property name="text" translatable="yes">10</property>
                 <property name="input_purpose">digits</property>
-                <signal name="activate" handler="settings_pencil" swapped="no"/>
                 <signal name="changed" handler="settings_update" swapped="no"/>
               </object>
               <packing>
@@ -743,7 +738,6 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">2</property>
             <child>
               <object class="GtkCheckButton" id="circleFillCheck">
                 <property name="visible">True</property>
@@ -751,7 +745,7 @@
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="clicked" handler="settings_circle" swapped="no"/>
+                <signal name="clicked" handler="settings_update" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -760,46 +754,31 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Pencil</property>
+              <object class="GtkButton" id="settings_draw">
+                <property name="label" translatable="yes">Draw Circle</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-<<<<<<< HEAD
-                <signal name="clicked" handler="pencil_button" swapped="no"/>
-=======
                 <signal name="clicked" handler="button_circle" swapped="no"/>
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">     Radius:    </property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="entry_radius">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="text" translatable="yes">50</property>
+                <property name="text" translatable="yes">10</property>
                 <signal name="activate" handler="settings_circle" swapped="no"/>
+                <signal name="changed" handler="settings_update" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -814,21 +793,13 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-<<<<<<< HEAD
-              <object class="GtkCheckButton" id="circleFillCheck">
-=======
               <object class="GtkCheckButton" id="rectFillCheck">
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
                 <property name="draw_indicator">True</property>
-<<<<<<< HEAD
-                <signal name="activate" handler="settings_circle" swapped="no"/>
-=======
-                <signal name="clicked" handler="settings_rect" swapped="no"/>
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
+                <signal name="clicked" handler="settings_update" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -837,22 +808,12 @@
               </packing>
             </child>
             <child>
-<<<<<<< HEAD
-              <object class="GtkButton" id="settings_draw">
-                <property name="label" translatable="yes">Draw Circle</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="button_circle" swapped="no"/>
-=======
               <object class="GtkButton" id="draw_rectangle">
                 <property name="label" translatable="yes">Draw Rectangle</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_left">3</property>
                 <signal name="clicked" handler="button_rect" swapped="no"/>
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -860,22 +821,6 @@
                 <property name="position">1</property>
               </packing>
             </child>
-<<<<<<< HEAD
-            <child>
-              <object class="GtkEntry" id="entry_radius">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">10</property>
-                <signal name="activate" handler="settings_circle" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-=======
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
           </object>
           <packing>
             <property name="expand">False</property>
@@ -887,43 +832,22 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-<<<<<<< HEAD
-            <child>
-              <object class="GtkCheckButton" id="rectFillCheck">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-=======
             <property name="spacing">4</property>
             <child>
               <object class="GtkColorButton" id="button_color2">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
-                <property name="receives_default">False</property>
+                <property name="receives_default">True</property>
                 <property name="rgba">rgb(255,255,255)</property>
               </object>
               <packing>
                 <property name="expand">True</property>
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-<<<<<<< HEAD
-              <object class="GtkButton" id="draw_rectangle">
-                <property name="label" translatable="yes">Draw Rectangle</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="button_rect" swapped="no"/>
-=======
               <object class="GtkButton">
                 <property name="label">gtk-select-color</property>
                 <property name="visible">True</property>
@@ -933,7 +857,6 @@
                 <property name="use_stock">True</property>
                 <property name="always_show_image">True</property>
                 <signal name="clicked" handler="button_color" swapped="no"/>
->>>>>>> babff5b066d69d1d1690823be202cabe7f911187
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -946,76 +869,6 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">12</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">4</property>
-            <child>
-              <object class="GtkColorButton" id="button_color2">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="rgba">rgb(255,255,255)</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label">gtk-select-color</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="margin_right">10</property>
-                <property name="use_stock">True</property>
-                <property name="always_show_image">True</property>
-                <signal name="clicked" handler="button_color" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_right">3</property>
-                <property name="label" translatable="yes">   Radius:   </property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="radius">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="text" translatable="yes">1</property>
-                <property name="input_purpose">digits</property>
-                <signal name="activate" handler="settings_pencil" swapped="no"/>
-                <signal name="changed" handler="settings_update" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">10</property>
           </packing>
         </child>
       </object>

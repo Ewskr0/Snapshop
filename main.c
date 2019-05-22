@@ -393,9 +393,9 @@ void settings_circle()
 
 	struct color newColor = {((int)(color_choosed.red * 255)), ((int)(color_choosed.green * 255)), ((int)(color_choosed.blue * 255)), 255};
 	circle_color = newColor;
-	
+
 	radius_circle = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "entry_radius"))));
-	
+
 	GtkToggleButton *fill = (gtk_builder_get_object(builder, "circleFillCheck"));
 	fill_circle = gtk_toggle_button_get_active(fill);
 }
@@ -411,7 +411,7 @@ void histogram_button_1()
 	GdkPixbuf *img_histo = Create_histo_graph(image_surface);
 	GtkWidget *histo_window = GTK_WIDGET(gtk_builder_get_object(builder, "histogram_window"));
 	GtkImage *image = GTK_IMAGE(gtk_builder_get_object(builder, "image_histogram"));
-	if(img_histo)
+	if (img_histo)
 		gtk_image_set_from_pixbuf(image, img_histo);
 	gtk_widget_show(histo_window);
 }
@@ -461,7 +461,7 @@ void draw_rect(int x, int y)
 
 void draw_rect2(int x, int y)
 {
-	
+
 	if (x < draw_rect_box.x1)
 	{
 		draw_rect_box.x2 = draw_rect_box.x1;
