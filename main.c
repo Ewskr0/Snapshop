@@ -368,7 +368,24 @@ void reverse_hor_button()
 void rotation_button()
 {
 	image_surface = Rotate(image_surface, 1);
+	update_image();
+}
 
+void blur_button_1()
+{
+	int size = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "blur_size_convo"))));
+	int val = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "blur_val_convo"))));
+
+	struct convolution_matrix *convo = InitMotionBlur(size, val);
+	GdkPixbuf *new_image = Apply_matrix(image_surface, convo);
+	image_surface = new_image;
+	update_image();
+}
+void blur_button_2()
+{
+	int size = atoi(gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(builder, "blur_size_motion"))));
+	GdkPixbuf *new_image = Motion_blur_hor(image_surface, size);
+	image_surface = new_image;
 	update_image();
 }
 
